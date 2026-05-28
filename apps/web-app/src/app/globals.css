@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+/* Paper output font override — forces Inter throughout the white paper card */
+.paper-font,
+.paper-font * {
+  font-family: 'Inter', sans-serif !important;
+}
+
+@theme {
+  --font-sans: var(--font-bricolage), 'Bricolage Grotesque', sans-serif;
+}
+
+:root {
+  --orange: #E8490F;
+  --orange-glow: rgba(232, 73, 15, 0.15);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  font-family: var(--font-bricolage), 'Bricolage Grotesque', sans-serif;
+  background: #E6E6E6;
+  color: #1A1A1A;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* Kill browser autofill blue highlight */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 9999px #FFFFFF inset !important;
+  box-shadow: 0 0 0 9999px #FFFFFF inset !important;
+  -webkit-text-fill-color: #303030 !important;
+  transition: background-color 99999s ease-in-out 0s;
+}
+
+/* Hide scrollbars globally — scroll still works */
+* {
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* IE / Edge */
+}
+*::-webkit-scrollbar {
+  display: none;                /* Chrome, Safari, Opera */
+}
+
+/* Due date input — placeholder color matches Figma #A9A9A9 */
+.due-date-input::placeholder {
+  color: #A9A9A9;
+  font-weight: 500;
+}
+
+/* Additional info textarea — placeholder color matches Figma rgba(48,48,48,0.6) */
+.additional-info-textarea::placeholder {
+  color: rgba(48, 48, 48, 0.6);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: -0.04em;
+  line-height: 140%;
+}
+
+/* Sidebar wordmark */
+.sidebar-wordmark {
+  font-family: var(--font-bricolage), 'Bricolage Grotesque', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 20px;
+  letter-spacing: -0.06em;
+  color: #303030;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
