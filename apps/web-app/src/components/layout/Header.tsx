@@ -2,7 +2,9 @@
 
 import React from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 import { Sparkles } from "lucide-react";
+import { useUserProfileStore, avatarUrl } from "@/store/userProfileStore";
 
 interface HeaderProps {
   title: string;
@@ -15,6 +17,15 @@ export default function Header({ title, showBack = true, disableBack = false, sh
   const router = useRouter();
   const pathname = usePathname();
   const isAssignmentsRoot = pathname === "/assignments";
+  const { user } = useUser();
+  const avatarSeed = useUserProfileStore((s) => s.avatarSeed);
+
+  const displayName =
+    user?.firstName
+      ? `${user.firstName}${user.lastName ? " " + user.lastName : ""}`
+      : user?.emailAddresses?.[0]?.emailAddress?.split("@")[0] ?? "Teacher";
+
+  const firstNameOnly = user?.firstName ?? displayName.split(" ")[0];
 
   return (
     /*
@@ -187,18 +198,11 @@ export default function Header({ title, showBack = true, disableBack = false, sh
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://api.dicebear.com/7.x/avataaars/svg?seed=JohnDoe&backgroundColor=b6e3f4"
-                alt="John Doe"
+                src={avatarUrl(avatarSeed)}
+                alt={displayName}
                 width={32}
                 height={32}
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                onError={(e) => {
-                  // Fallback to gradient initial on error
-                  const parent = (e.target as HTMLImageElement).parentElement;
-                  if (parent) {
-                    parent.innerHTML = `<div style="width:30px;height:30px;borderRadius:50%;background:linear-gradient(135deg,#f5a623,#e8490f);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;">J</div>`;
-                  }
-                }}
               />
             </div>
 
@@ -230,7 +234,7 @@ export default function Header({ title, showBack = true, disableBack = false, sh
                   color: "#303030",
                 }}
               >
-                John Doe
+                {firstNameOnly}
               </span>
 
               {/* Chevron */}

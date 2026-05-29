@@ -2,6 +2,8 @@
 
 import React from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { useUserProfileStore, avatarUrl } from "@/store/userProfileStore";
+import { useClerk } from "@clerk/nextjs";
 
 interface NavItem {
   icon: (props: { color: string; opacity: number }) => React.ReactNode;
@@ -109,6 +111,9 @@ export default function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
   const isOutput = pathname.startsWith("/assignments/output");
+  const schoolName = useUserProfileStore((s) => s.schoolName);
+  const avatarSeed = useUserProfileStore((s) => s.avatarSeed);
+  const { signOut } = useClerk();
 
   const isActive = (label: string) => {
     if (label === "Assignments") {
@@ -348,21 +353,22 @@ export default function Sidebar() {
         >
           {/* Profile Info Row (232x56) */}
           <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, width: 232, height: 56 }}>
-            {/* Avatar */}
+            {/* Avatar — use selected DiceBear avatar */}
             <div
               style={{
                 width: 59,
                 height: 56,
                 borderRadius: 8,
-                background: "linear-gradient(135deg, #f5a623, #e8490f)",
+                background: "#F6F6F6",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 flexShrink: 0,
-                fontSize: 18,
+                overflow: "hidden",
               }}
             >
-              🏫
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={avatarUrl(avatarSeed)} alt="avatar" width={59} height={56} style={{ objectFit: "cover", width: "100%", height: "100%" }} />
             </div>
             <div style={{ display: "flex", flexDirection: "column", width: 165, height: 44, justifyContent: "center" }}>
               <div
@@ -378,20 +384,27 @@ export default function Sidebar() {
                   alignItems: "center",
                 }}
               >
-                Delhi Public School
+                {schoolName || "Your School"}
               </div>
-              <div
+              <button
+                onClick={() => signOut({ redirectUrl: "/sign-in" })}
                 style={{
-                  fontSize: 14,
-                  fontWeight: 400,
-                  color: "#5E5E5E",
+                  fontSize: 13,
+                  fontWeight: 500,
+                  color: "#E8490F",
                   height: 20,
                   display: "flex",
                   alignItems: "center",
+                  background: "none",
+                  border: "none",
+                  padding: 0,
+                  cursor: "pointer",
+                  fontFamily: "inherit",
+                  letterSpacing: "-0.02em",
                 }}
               >
-                Bokaro Steel City
-              </div>
+                Sign out
+              </button>
             </div>
           </div>
         </div>

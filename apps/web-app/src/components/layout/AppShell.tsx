@@ -1,8 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
+import { useUser, useClerk } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
+import { useUserProfileStore } from "@/store/userProfileStore";
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -21,11 +24,27 @@ export default function AppShell({
   showTitleIcon = true,
   footerSlot,
 }: AppShellProps) {
+  const { user, isLoaded } = useUser();
+  const isOnboarded = useUserProfileStore((s) => s.isOnboarded);
+  const router = useRouter();
+
+  // Redirect to onboarding if not done yet
+  useEffect(() => {
+    if (isLoaded && user && !isOnboarded) {
+      router.replace("/onboarding");
+    }
+  }, [isLoaded, user, isOnboarded, router]);
+
+  if (!isLoaded || !user) {
+    return (
+      <div style={{ minHeight: "100vh", background: "linear-gradient(180deg, #E7E7E7 0%, #DCDCDC 100%)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ width: 36, height: 36, border: "3px solid rgba(0,0,0,0.1)", borderTopColor: "#E8490F", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
+
   return (
-    /*
-     * Full-screen centering shell — constrains the app to 1440px (Figma frame)
-     * and centers it horizontally on ultra-wide displays.
-     */
     <div
       className="app-shell"
       style={{
@@ -37,79 +56,68 @@ export default function AppShell({
         overflow: "visible",
       }}
     >
-    {/*
-     * Outer gray canvas — max 1440px, 12px padding on all sides, 12px gap.
-     * Both sidebar and right panel float inside this canvas.
-     */}
-    <div
-      className="app-shell__inner"
-      style={{
-        display: "flex",
-        width: "100%",
-        maxWidth: 1440,
-        height: "100vh",
-        padding: 12,
-        gap: 12,
-        boxSizing: "border-box",
-        overflow: "hidden",
-      }}
-    >
-      {/* ── LEFT: Sidebar — white floating card ── */}
-      <div className="app-shell__sidebar-wrap" style={{ flexShrink: 0 }}>
-        <aside
-          className="app-shell__sidebar"
-          style={{
-            width: 304,
-            minWidth: 304,
-            height: "100%",
-            background: "#ffffff",
-            borderRadius: 16,
-            boxShadow: "12px 16px 28px rgba(0, 0, 0, 0.16), 4px 6px 12px rgba(0, 0, 0, 0.08)",
-            display: "flex",
-            flexDirection: "column",
-            overflow: "hidden",
-          }}
-        >
-          <Sidebar />
-        </aside>
-      </div>
-
-      {/*
-       * ── RIGHT: layout container ──
-       * Same bg as outer canvas — transparent to canvas.
-       * No overflow:hidden needed — header is a self-contained floating card.
-       */}
       <div
-        className="app-shell__content"
+        className="app-shell__inner"
         style={{
-          flex: 1,
-          height: "100%",
           display: "flex",
-          flexDirection: "column",
-          background: "transparent",
-          minWidth: 0,
+          width: "100%",
+          maxWidth: 1440,
+          height: "100vh",
+          padding: 12,
+          gap: 12,
+          boxSizing: "border-box",
+          overflow: "hidden",
         }}
       >
-        {/* White header bar — its top corners are clipped by parent borderRadius */}
-        <Header title={headerTitle} showBack={showBack} disableBack={disableBack} showTitleIcon={showTitleIcon} />
+        {/* ── LEFT: Sidebar ── */}
+        <div className="app-shell__sidebar-wrap" style={{ flexShrink: 0 }}>
+          <aside
+            className="app-shell__sidebar"
+            style={{
+              width: 304,
+              minWidth: 304,
+              height: "100%",
+              background: "#ffffff",
+              borderRadius: 16,
+              boxShadow: "12px 16px 28px rgba(0, 0, 0, 0.16), 4px 6px 12px rgba(0, 0, 0, 0.08)",
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
+            }}
+          >
+            <Sidebar />
+          </aside>
+        </div>
 
-        {/* Scrollable content — sits directly on the outer/primary gray */}
-        <main
+        {/* ── RIGHT: content ── */}
+        <div
+          className="app-shell__content"
           style={{
             flex: 1,
-            overflow: "auto",
-            minHeight: 0,
-            paddingTop: 12,
-            paddingBottom: 10,
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            background: "transparent",
+            minWidth: 0,
           }}
         >
-          {children}
-        </main>
+          <Header title={headerTitle} showBack={showBack} disableBack={disableBack} showTitleIcon={showTitleIcon} />
 
-        {/* Optional pinned footer (e.g. form Prev/Next) */}
-        {footerSlot}
+          <main
+            style={{
+              flex: 1,
+              overflow: "auto",
+              minHeight: 0,
+              paddingTop: 12,
+              paddingBottom: 10,
+            }}
+          >
+            {children}
+          </main>
+
+          {footerSlot}
+        </div>
       </div>
-    </div>
     </div>
   );
 }

@@ -829,9 +829,8 @@ export default function Step1Details({
             {/* Input pill: Frame 1618872169 */}
             <div className="create-details__input-wrap" style={{ position: "relative", width: "100%" }}>
               <input
-                className="create-details__input"
+                className="due-date-input create-details__input"
                 id="due-date-input"
-                className="due-date-input"
                 type="text"
                 placeholder="DD-MM-YYYY"
                 value={formData.dueDate}
