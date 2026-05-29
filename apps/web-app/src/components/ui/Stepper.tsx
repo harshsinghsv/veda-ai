@@ -9,11 +9,13 @@ interface StepperProps {
   onChange: (value: number) => void;
   min?: number;
   max?: number;
+  className?: string;
 }
 
-export default function Stepper({ id, value, onChange, min = 1, max = 50 }: StepperProps) {
+export default function Stepper({ id, value, onChange, min = 1, max = 50, className }: StepperProps) {
   return (
     <div
+      className={className}
       style={{
         display: "flex",
         flexDirection: "row",

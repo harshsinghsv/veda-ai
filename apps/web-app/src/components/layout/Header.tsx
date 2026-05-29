@@ -22,6 +22,7 @@ export default function Header({ title, showBack = true, disableBack = false, sh
      * background: rgba(255,255,255,0.75), border-radius: 16px
      */
     <div
+      className="app-header"
       style={{
         margin: 0,
         background: "rgba(255, 255, 255, 0.75)",
@@ -34,6 +35,7 @@ export default function Header({ title, showBack = true, disableBack = false, sh
       }}
     >
       <div
+        className="app-header__inner"
         style={{
           height: 56,
           display: "flex",
@@ -44,9 +46,10 @@ export default function Header({ title, showBack = true, disableBack = false, sh
         }}
       >
         {/* ── Left: back arrow + breadcrumb ── */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <div className="app-header__left" style={{ display: "flex", alignItems: "center", gap: 8 }}>
           {showBack && (
             <button
+              className="app-header__back"
               id="header-back-btn"
               disabled={disableBack}
               onClick={() => {
@@ -75,7 +78,7 @@ export default function Header({ title, showBack = true, disableBack = false, sh
               }}
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd" clipRule="evenodd" d="M10.7071 4.29289C11.0976 4.68342 11.0976 5.31658 10.7071 5.70711L5.41421 11H21C21.5523 11 22 11.4477 22 12C22 12.5523 21.5523 13 21 13H5.41421L10.7071 18.2929C11.0976 18.6834 11.0976 19.3166 10.7071 19.7071C10.3166 20.0976 9.68342 20.0976 9.29289 19.7071L2.29289 12.7071C1.90237 12.3166 1.90237 11.6834 2.29289 11.2929L9.29289 4.29289C9.68342 3.90237 10.3166 3.90237 10.7071 4.29289Z" fill="#303030"/>
+                <path d="M20 12H4M4 12L10 18M4 12L10 6" stroke="#303030" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
           )}
@@ -103,7 +106,7 @@ export default function Header({ title, showBack = true, disableBack = false, sh
         </div>
 
         {/* ── Right: bell + user ── */}
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <div className="app-header__right" style={{ display: "flex", alignItems: "center", gap: 12 }}>
 
           {/* Bell with orange dot */}
           <div
@@ -141,6 +144,7 @@ export default function Header({ title, showBack = true, disableBack = false, sh
 
           {/* User section */}
           <div
+            className="app-header__user"
             style={{
               display: "flex",
               flexDirection: "row",
@@ -199,6 +203,7 @@ export default function Header({ title, showBack = true, disableBack = false, sh
             </div>
 
             <div
+              className="app-header__user-text"
               style={{
                 display: "flex",
                 flexDirection: "row",
@@ -211,6 +216,7 @@ export default function Header({ title, showBack = true, disableBack = false, sh
             >
               {/* Name */}
               <span
+                className="app-header__user-name"
                 style={{
                   width: 65,
                   height: 19,
@@ -228,7 +234,14 @@ export default function Header({ title, showBack = true, disableBack = false, sh
               </span>
 
               {/* Chevron */}
-              <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg
+                className="app-header__user-chevron"
+                width="14"
+                height="8"
+                viewBox="0 0 14 8"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <path d="M0.75 0.75L6.75 6.75L12.75 0.75" stroke="#303030" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
