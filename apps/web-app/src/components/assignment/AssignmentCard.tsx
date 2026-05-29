@@ -12,17 +12,18 @@ export default function AssignmentCard({ assignment }: AssignmentCardProps) {
   return (
     /* Frame 40026 — 542×162px, padding 24px, border-radius 24px, background #FFFFFF */
     <div
+      className="assignment-card"
       style={{
         background: "#FFFFFF",
         borderRadius: 24,
-        padding: 24,
+        padding: "var(--assignment-card-padding, 24px)",
         position: "relative",
-        height: 162,
+        height: "var(--assignment-card-height, 162px)",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "flex-start",
-        gap: 48,
+        gap: "var(--assignment-card-gap, 48px)",
         boxSizing: "border-box",
         cursor: "pointer",
         transition: "box-shadow 0.15s, transform 0.15s",
@@ -44,9 +45,9 @@ export default function AssignmentCard({ assignment }: AssignmentCardProps) {
           justifyContent: "space-between",
           alignItems: "flex-start",
           padding: 0,
-          gap: 40,
+          gap: "var(--assignment-card-row-gap, 40px)",
           width: "100%",
-          height: 114,
+          height: "var(--assignment-card-row-height, 114px)",
         }}
       >
         {/* Frame 1984077325 — title area, height 29px */}
@@ -58,7 +59,7 @@ export default function AssignmentCard({ assignment }: AssignmentCardProps) {
             padding: 0,
             gap: 4,
             width: "100%",
-            height: 29,
+            height: "var(--assignment-card-title-height, 29px)",
           }}
         >
           {/* Frame 1618872420 — title row with 3-dots */}
@@ -71,14 +72,14 @@ export default function AssignmentCard({ assignment }: AssignmentCardProps) {
               padding: 0,
               gap: 39,
               width: "100%",
-              height: 29,
+              height: "var(--assignment-card-title-height, 29px)",
             }}
           >
             {/* Title: 24px/800, #303030, line-height 120%, letter-spacing -0.04em */}
             <h3
               style={{
                 margin: 0,
-                fontSize: 24,
+                fontSize: "var(--assignment-card-title-size, 24px)",
                 fontWeight: 800,
                 color: "#303030",
                 lineHeight: "120%",
@@ -113,7 +114,7 @@ export default function AssignmentCard({ assignment }: AssignmentCardProps) {
           {/* Assigned on: 16px/800, #303030, line-height 120%, letter-spacing -0.04em */}
           <span
             style={{
-              fontSize: 16,
+              fontSize: "var(--assignment-card-meta-size, 16px)",
               lineHeight: "120%",
               letterSpacing: "-0.04em",
               fontFamily: "inherit",
@@ -126,7 +127,7 @@ export default function AssignmentCard({ assignment }: AssignmentCardProps) {
           {assignment.dueDate && (
             <span
               style={{
-                fontSize: 16,
+                fontSize: "var(--assignment-card-meta-size, 16px)",
                 lineHeight: "120%",
                 letterSpacing: "-0.04em",
                 fontFamily: "inherit",
