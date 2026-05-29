@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Plus_Jakarta_Sans, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 
@@ -26,8 +27,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${plusJakarta.variable} ${bricolage.variable} h-full antialiased`}>
-      <body className="h-full" suppressHydrationWarning>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" className={`${plusJakarta.variable} ${bricolage.variable} h-full antialiased`}>
+        <body className="h-full" suppressHydrationWarning>
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
