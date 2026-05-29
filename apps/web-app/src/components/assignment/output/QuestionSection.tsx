@@ -85,8 +85,8 @@ export default function QuestionSection({ section }: { section: Section }) {
         <p
           style={{
             margin: 0,
-            fontSize: 16,
-            fontWeight: 400,
+            fontSize: 18,
+            fontWeight: 600,
             fontStyle: "italic",
             lineHeight: "160%",
             letterSpacing: "-0.04em",

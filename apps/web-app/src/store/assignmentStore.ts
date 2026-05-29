@@ -44,7 +44,7 @@ export const useAssignmentStore = create<AssignmentStore>()(
   persist(
     (set, get) => ({
       assignments: [
-        ],
+      ],
       currentAssignmentId: null,
       formStep: 1,
       formData: { ...defaultFormData },

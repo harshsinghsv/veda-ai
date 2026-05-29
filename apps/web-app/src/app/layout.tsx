@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${plusJakarta.variable} ${bricolage.variable} h-full antialiased`}>
-      <body className="h-full">{children}</body>
+      <body className="h-full" suppressHydrationWarning>{children}</body>
     </html>
   );
 }
