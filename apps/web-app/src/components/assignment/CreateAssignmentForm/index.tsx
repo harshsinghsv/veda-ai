@@ -45,6 +45,7 @@ function CreateFormFooter() {
 
   return (
     <div
+      className="create-footer"
       style={{
         paddingTop: 28,
         paddingBottom: 18,
@@ -52,6 +53,7 @@ function CreateFormFooter() {
       }}
     >
       <div
+        className="create-footer__row"
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -204,10 +206,11 @@ export default function CreateAssignmentForm() {
   };
 
   return (
-    <div style={{ paddingTop: 20, paddingBottom: 20 }}>
+    <div className="create-assignment" style={{ paddingTop: 20, paddingBottom: 20 }}>
 
       {/* ── Page title — left-aligned, matching /assignments layout ── */}
       <div
+        className="create-assignment__title"
         style={{
           marginBottom: 14,
           paddingLeft: 8,
@@ -248,7 +251,10 @@ export default function CreateAssignmentForm() {
 
 
       {/* ── Form card + step indicator — same width ── */}
-      <div style={{ maxWidth: 810, width: "100%", margin: "0 auto", paddingLeft: 22, paddingRight: 22, boxSizing: "border-box" }}>
+      <div
+        className="create-assignment__body"
+        style={{ maxWidth: 810, width: "100%", margin: "0 auto", paddingLeft: 22, paddingRight: 22, boxSizing: "border-box" }}
+      >
         <StepIndicator formStep={formStep} />
         <Step1Details
           formData={formData}

@@ -303,6 +303,226 @@ function QuestionTypeRowComponent({ row }: { row: QuestionTypeRow }) {
   );
 }
 
+// ── Mobile-only question type card ─────────────────────────────────────────
+function MobileQuestionTypeCard({ row }: { row: QuestionTypeRow }) {
+  const updateQuestionType = useAssignmentStore((s) => s.updateQuestionType);
+  const removeQuestionType = useAssignmentStore((s) => s.removeQuestionType);
+  const [open, setOpen] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  return (
+    <div
+      ref={cardRef}
+      style={{
+        background: "#FFFFFF",
+        borderRadius: 24,
+        padding: 12,
+        gap: 12,
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        boxSizing: "border-box",
+        position: "relative",
+      }}
+    >
+      {/* Top row: type name + chevron + X */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: 12,
+        }}
+      >
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 24,
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: 0,
+            fontFamily: "inherit",
+            flex: 1,
+            minWidth: 0,
+          }}
+        >
+          <span
+            style={{
+              fontSize: 14,
+              fontWeight: 500,
+              color: "#303030",
+              letterSpacing: "-0.04em",
+              lineHeight: "140%",
+              textAlign: "left",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {row.type}
+          </span>
+          <QuestionTypeDownIcon open={open} />
+        </button>
+
+        <button
+          type="button"
+          onClick={() => removeQuestionType(row.id)}
+          style={{
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 0,
+            width: 16,
+            height: 16,
+            flexShrink: 0,
+          }}
+        >
+          <QuestionTypeCloseIcon />
+        </button>
+      </div>
+
+      {/* Dropdown list */}
+      {open && (
+        <div
+          style={{
+            position: "absolute",
+            top: "calc(100% + 6px)",
+            left: 0,
+            right: 0,
+            background: "#FFFFFF",
+            borderRadius: 16,
+            boxShadow: "0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)",
+            zIndex: 50,
+            overflow: "hidden",
+            padding: "6px 0",
+          }}
+        >
+          {QUESTION_TYPES.map((opt) => (
+            <button
+              key={opt}
+              type="button"
+              onClick={() => { updateQuestionType(row.id, "type", opt); setOpen(false); }}
+              style={{
+                display: "block",
+                width: "100%",
+                padding: "10px 16px",
+                background: opt === row.type ? "#F0F0F0" : "transparent",
+                color: "#303030",
+                border: "none",
+                textAlign: "left",
+                fontSize: 15,
+                fontWeight: opt === row.type ? 600 : 400,
+                letterSpacing: "-0.03em",
+                cursor: "pointer",
+                fontFamily: "inherit",
+              }}
+            >
+              {opt}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Stepper block */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "flex-start",
+          padding: 8,
+          gap: 12,
+          background: "#F0F0F0",
+          borderRadius: 24,
+          width: "100%",
+          boxSizing: "border-box",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 8,
+            flex: 1,
+          }}
+        >
+          <span
+            style={{
+              fontSize: 14,
+              fontWeight: 500,
+              color: "#303030",
+              letterSpacing: "-0.04em",
+              lineHeight: "140%",
+              textAlign: "center",
+            }}
+          >
+            No. of Questions
+          </span>
+          <Stepper
+            id={`mobile-qt-count-${row.id}`}
+            value={row.count}
+            onChange={(v) => updateQuestionType(row.id, "count", v)}
+            min={1}
+            max={50}
+            className="mobile-stepper"
+          />
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 8,
+            flex: 1,
+          }}
+        >
+          <span
+            style={{
+              fontSize: 14,
+              fontWeight: 500,
+              color: "#303030",
+              letterSpacing: "-0.04em",
+              lineHeight: "140%",
+              textAlign: "center",
+            }}
+          >
+            Marks
+          </span>
+          <Stepper
+            id={`mobile-qt-marks-${row.id}`}
+            value={row.marks}
+            onChange={(v) => updateQuestionType(row.id, "marks", v)}
+            min={1}
+            max={100}
+            className="mobile-stepper"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Step1Details({
   formData,
   errors,
@@ -320,6 +540,7 @@ export default function Step1Details({
 
   return (
     <div
+      className="create-details"
       style={{
         /* Frame 1984077359 */
         display: "flex",
@@ -374,6 +595,7 @@ export default function Step1Details({
 
       {/* ── Content area: Frame 1984077364 ── */}
       <div
+        className="create-details__content"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -385,6 +607,7 @@ export default function Step1Details({
       >
         {/* ── File upload section: Frame 1984077301 ── */}
         <div
+          className="create-details__upload"
           style={{
             display: "flex",
             flexDirection: "column",
@@ -396,6 +619,7 @@ export default function Step1Details({
         >
           {/* Upload box: Frame 1618872469 */}
           <div
+            className="create-details__upload-zone"
             id="file-upload-zone"
             onDragOver={(e) => {
               e.preventDefault();
@@ -431,6 +655,7 @@ export default function Step1Details({
           >
             {/* Icon box: Frame 1618872514 */}
             <div
+              className="create-details__upload-icon"
               style={{
                 display: "flex",
                 flexDirection: "row",
@@ -493,6 +718,7 @@ export default function Step1Details({
 
             {/* Browse Files button */}
             <button
+              className="create-details__upload-btn"
               id="browse-files-btn"
               onClick={(e) => {
                 e.stopPropagation();
@@ -542,6 +768,7 @@ export default function Step1Details({
 
           {/* "Upload images..." subtitle */}
           <p
+            className="create-details__upload-subtitle"
             style={{
               margin: 0,
               width: "100%",
@@ -560,6 +787,7 @@ export default function Step1Details({
 
         {/* ── Due Date section: Frame 1618872464 ── */}
         <div
+          className="create-details__due"
           style={{
             display: "flex",
             flexDirection: "row",
@@ -571,6 +799,7 @@ export default function Step1Details({
         >
           {/* Frame 1618872457 */}
           <div
+            className="create-details__due-block"
             style={{
               display: "flex",
               flexDirection: "column",
@@ -581,6 +810,7 @@ export default function Step1Details({
             }}
           >
             <label
+              className="create-details__label"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -597,8 +827,9 @@ export default function Step1Details({
             </label>
 
             {/* Input pill: Frame 1618872169 */}
-            <div style={{ position: "relative", width: "100%" }}>
+            <div className="create-details__input-wrap" style={{ position: "relative", width: "100%" }}>
               <input
+                className="create-details__input"
                 id="due-date-input"
                 className="due-date-input"
                 type="text"
@@ -657,8 +888,9 @@ export default function Step1Details({
           </div>
         </div>
 
-        {/* ── Question type section: Frame 1618872171 ── */}
+        {/* ── Question type section: Frame 1618872171 — desktop only ── */}
         <div
+          className="create-details__question desktop-qt"
           style={{
             display: "flex",
             flexDirection: "column",
@@ -671,7 +903,8 @@ export default function Step1Details({
         >
           {/* Frame 1984077498: left (471px) + right (275px) with gap 64px */}
           {/* Frame 1984077498: left (471px) + right (275px) with gap 32px */}
-          <div
+            <div
+              className="create-details__question-row"
             style={{
               display: "flex",
               flexDirection: "row",
@@ -696,6 +929,7 @@ export default function Step1Details({
             >
               {/* "Question Type" header */}
               <span
+                className="create-details__label"
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -724,6 +958,7 @@ export default function Step1Details({
 
               {/* Add Question Type button: Frame 1984077500 */}
               <button
+                className="create-details__add-btn"
                 id="add-question-type-btn"
                 onClick={() => {
                   addQuestionType();
@@ -745,6 +980,7 @@ export default function Step1Details({
               >
                 {/* Dark circle button */}
                 <span
+                  className="create-details__add-icon"
                   style={{
                     display: "flex",
                     flexDirection: "row",
@@ -777,6 +1013,7 @@ export default function Step1Details({
 
             {/* Right column: Frame 1984077499 — No. of Questions + Marks */}
             <div
+              className="create-details__metrics"
               style={{
                 display: "flex",
                 flexDirection: "row",
@@ -789,6 +1026,7 @@ export default function Step1Details({
             >
               {/* No. of Questions column: Frame 1618872459 */}
               <div
+                className="create-details__metric-col"
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -832,6 +1070,7 @@ export default function Step1Details({
 
               {/* Marks column: Frame 1618872460 */}
               <div
+                className="create-details__metric-col"
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -877,6 +1116,7 @@ export default function Step1Details({
           {/* Total Questions / Total Marks: Frame 1984077510 */}
           {formData.questionTypes.length > 0 && (
             <div
+              className="create-details__totals"
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -925,8 +1165,106 @@ export default function Step1Details({
           )}
         </div>
 
+        {/* ── Mobile question type section ── */}
+        <div
+          className="mobile-qt"
+          style={{
+            display: "none",
+            flexDirection: "column",
+            alignItems: "flex-end",
+            gap: 16,
+            width: "100%",
+          }}
+        >
+          <span
+            style={{
+              width: "100%",
+              fontSize: 16,
+              fontWeight: 700,
+              color: "#303030",
+              letterSpacing: "-0.04em",
+              lineHeight: "140%",
+              fontFamily: "inherit",
+            }}
+          >
+            Question Type
+          </span>
+
+          {formData.questionTypes.map((row) => (
+            <MobileQuestionTypeCard key={row.id} row={row} />
+          ))}
+
+          {errors.questionTypes && (
+            <p style={{ fontSize: 12, color: "#E53935", margin: 0, alignSelf: "flex-start" }}>
+              {errors.questionTypes}
+            </p>
+          )}
+
+          <button
+            id="add-question-type-btn-mobile"
+            onClick={() => {
+              addQuestionType();
+              if (errors.questionTypes)
+                setErrors((p) => ({ ...p, questionTypes: undefined }));
+            }}
+            style={{
+              alignSelf: "flex-start",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              padding: 0,
+              gap: 8,
+              height: 36,
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              fontFamily: "inherit",
+            }}
+          >
+            <span
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: 8,
+                width: 36,
+                height: 36,
+                background: "#2B2B2B",
+                borderRadius: 48,
+                flexShrink: 0,
+              }}
+            >
+              <AddQuestionTypeIcon />
+            </span>
+            <span
+              style={{
+                fontSize: 14,
+                fontWeight: 700,
+                color: "#303030",
+                letterSpacing: "-0.04em",
+                lineHeight: "140%",
+                fontFamily: "inherit",
+              }}
+            >
+              Add Question Type
+            </span>
+          </button>
+
+          {formData.questionTypes.length > 0 && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-end" }}>
+              <span style={{ fontSize: 16, fontWeight: 500, color: "#303030", letterSpacing: "-0.04em", lineHeight: "110%", fontFamily: "inherit" }}>
+                Total Questions : {totalQuestions}
+              </span>
+              <span style={{ fontSize: 16, fontWeight: 500, color: "#303030", letterSpacing: "-0.04em", lineHeight: "110%", fontFamily: "inherit" }}>
+                Total Marks : {totalMarks}
+              </span>
+            </div>
+          )}
+        </div>
+
         {/* ── Additional Information: Frame 1984077522 ── */}
         <div
+          className="create-details__additional"
           style={{
             display: "flex",
             flexDirection: "column",
@@ -937,6 +1275,7 @@ export default function Step1Details({
           }}
         >
           <label
+            className="create-details__label"
             style={{
               display: "flex",
               alignItems: "center",
@@ -956,6 +1295,7 @@ export default function Step1Details({
 
           {/* Textarea box: Frame 1984077611 */}
           <div
+            className="create-details__textarea"
             style={{
               boxSizing: "border-box",
               display: "flex",
@@ -1001,6 +1341,7 @@ export default function Step1Details({
 
             {/* Mic button: Frame 1984077290 */}
             <button
+              className="create-details__mic"
               type="button"
               style={{
                 display: "flex",
