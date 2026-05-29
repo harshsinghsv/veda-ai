@@ -27,6 +27,7 @@ export default function AppShell({
      * and centers it horizontally on ultra-wide displays.
      */
     <div
+      className="app-shell"
       style={{
         width: "100vw",
         height: "100vh",
@@ -41,6 +42,7 @@ export default function AppShell({
      * Both sidebar and right panel float inside this canvas.
      */}
     <div
+      className="app-shell__inner"
       style={{
         display: "flex",
         width: "100%",
@@ -53,8 +55,9 @@ export default function AppShell({
       }}
     >
       {/* ── LEFT: Sidebar — white floating card ── */}
-      <div style={{ flexShrink: 0 }}>
+      <div className="app-shell__sidebar-wrap" style={{ flexShrink: 0 }}>
         <aside
+          className="app-shell__sidebar"
           style={{
             width: 304,
             minWidth: 304,
@@ -77,6 +80,7 @@ export default function AppShell({
        * No overflow:hidden needed — header is a self-contained floating card.
        */}
       <div
+        className="app-shell__content"
         style={{
           flex: 1,
           height: "100%",
