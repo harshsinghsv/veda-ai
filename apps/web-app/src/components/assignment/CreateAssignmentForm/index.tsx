@@ -90,7 +90,9 @@ function CreateFormFooter() {
             (e.currentTarget as HTMLButtonElement).style.opacity = "1";
           }}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fillRule="evenodd" clipRule="evenodd" d="M8.92243 3.57745C9.24786 3.90289 9.24786 4.43053 8.92243 4.75596L4.51168 9.16671H17.4998C17.9601 9.16671 18.3332 9.5398 18.3332 10C18.3332 10.4603 17.9601 10.8334 17.4998 10.8334H4.51168L8.92243 15.2441C9.24786 15.5696 9.24786 16.0972 8.92243 16.4226C8.59699 16.7481 8.06935 16.7481 7.74391 16.4226L1.91058 10.5893C1.58514 10.2639 1.58514 9.73622 1.91058 9.41079L7.74391 3.57745C8.06935 3.25201 8.59699 3.25201 8.92243 3.57745Z" fill="#303030"/>
+          </svg>
           Previous
         </button>
 
@@ -128,7 +130,11 @@ function CreateFormFooter() {
           }}
         >
           {isGenerating ? "Generating..." : "Continue"}
-          {!isGenerating && <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>}
+          {!isGenerating && (
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" clipRule="evenodd" d="M11.0772 3.57745C11.4027 3.25201 11.9303 3.25201 12.2558 3.57745L18.0891 9.41079C18.4145 9.73622 18.4145 10.2639 18.0891 10.5893L12.2558 16.4226C11.9303 16.7481 11.4027 16.7481 11.0772 16.4226C10.7518 16.0972 10.7518 15.5696 11.0772 15.2441L15.488 10.8334H2.49984C2.0396 10.8334 1.6665 10.4603 1.6665 10C1.6665 9.5398 2.0396 9.16671 2.49984 9.16671H15.488L11.0772 4.75596C10.7518 4.43053 10.7518 3.90289 11.0772 3.57745Z" fill="white"/>
+            </svg>
+          )}
         </button>
       </div>
     </div>

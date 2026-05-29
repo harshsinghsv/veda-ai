@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Plus } from "lucide-react";
+
 import { useAssignmentStore } from "@/store/assignmentStore";
 import AssignmentCard from "@/components/assignment/AssignmentCard";
 import AssignmentEmptyState from "@/components/assignment/AssignmentEmptyState";
@@ -121,23 +121,22 @@ export default function AssignmentList() {
               padding: 0,
             }}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#A9A9A9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" clipRule="evenodd" d="M0 2.32153C0 1.03938 1.03938 0 2.32153 0H12.6785C13.9606 0 15 1.03938 15 2.32153C15 2.99412 14.7594 3.64453 14.3217 4.1552L11.9599 6.91062C11.0537 7.96787 10.5556 9.31442 10.5556 10.7069V12.5C10.5556 13.8807 9.43627 15 8.05556 15H6.94444C5.56373 15 4.44444 13.8807 4.44444 12.5V10.7069C4.44444 9.31442 3.94632 7.96787 3.04011 6.91062L0.678317 4.1552C0.240601 3.64453 0 2.99412 0 2.32153ZM2.32153 1.66667C1.95986 1.66667 1.66667 1.95986 1.66667 2.32153C1.66667 2.59627 1.76495 2.86195 1.94375 3.07054L4.30554 5.82597C5.47067 7.18529 6.11111 8.91657 6.11111 10.7069V12.5C6.11111 12.9602 6.48421 13.3333 6.94444 13.3333H8.05556C8.51579 13.3333 8.88889 12.9602 8.88889 12.5V10.7069C8.88889 8.91657 9.52933 7.18529 10.6945 5.82597L13.0563 3.07054C13.2351 2.86195 13.3333 2.59627 13.3333 2.32153C13.3333 1.95986 13.0401 1.66667 12.6785 1.66667H2.32153Z" fill="#A9A9A9"/>
             </svg>
             Filter By
           </button>
 
           <div style={{ position: "relative", width: 380 }}>
             <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
+              width="15"
+              height="15"
+              viewBox="0 0 15 15"
               fill="none"
-              stroke="#8A8A8A"
-              strokeWidth="2"
+              xmlns="http://www.w3.org/2000/svg"
               style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)" }}
             >
-              <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+              <path fillRule="evenodd" clipRule="evenodd" d="M7.5 1.66667C4.27834 1.66667 1.66667 4.27834 1.66667 7.5C1.66667 10.7217 4.27834 13.3333 7.5 13.3333C10.7217 13.3333 13.3333 10.7217 13.3333 7.5C13.3333 4.27834 10.7217 1.66667 7.5 1.66667ZM0 7.5C0 3.35786 3.35786 0 7.5 0C11.6421 0 15 3.35786 15 7.5C15 11.6421 11.6421 15 7.5 15C3.35786 15 0 11.6421 0 7.5Z" fill="#A9A9A9"/>
             </svg>
             <input
               id="assignment-search"
@@ -227,7 +226,10 @@ export default function AssignmentList() {
             (e.currentTarget as HTMLButtonElement).style.opacity = "1";
           }}
         >
-          <Plus size={17} />
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fillRule="evenodd" clipRule="evenodd" d="M0 7.49996C0 7.03972 0.373096 6.66663 0.833333 6.66663H14.1667C14.6269 6.66663 15 7.03972 15 7.49996C15 7.9602 14.6269 8.33329 14.1667 8.33329H0.833333C0.373096 8.33329 0 7.9602 0 7.49996Z" fill="white"/>
+            <path fillRule="evenodd" clipRule="evenodd" d="M7.49992 -3.64262e-08C7.96016 -1.63085e-08 8.33325 0.373096 8.33325 0.833333L8.33325 14.1667C8.33325 14.6269 7.96016 15 7.49992 15C7.03968 15 6.66658 14.6269 6.66658 14.1667L6.66659 0.833333C6.66659 0.373096 7.03968 -5.65438e-08 7.49992 -3.64262e-08Z" fill="white"/>
+          </svg>
           Create Assignment
         </button>
       </div>

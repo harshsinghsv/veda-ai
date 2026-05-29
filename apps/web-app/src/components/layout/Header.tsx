@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { ArrowLeft, LayoutGrid, ChevronDown, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 interface HeaderProps {
   title: string;
@@ -74,13 +74,20 @@ export default function Header({ title, showBack = true, disableBack = false, sh
                 if (!disableBack) (e.currentTarget as HTMLButtonElement).style.background = "#ffffff";
               }}
             >
-              <ArrowLeft size={24} strokeWidth={2} />
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fillRule="evenodd" clipRule="evenodd" d="M10.7071 4.29289C11.0976 4.68342 11.0976 5.31658 10.7071 5.70711L5.41421 11H21C21.5523 11 22 11.4477 22 12C22 12.5523 21.5523 13 21 13H5.41421L10.7071 18.2929C11.0976 18.6834 11.0976 19.3166 10.7071 19.7071C10.3166 20.0976 9.68342 20.0976 9.29289 19.7071L2.29289 12.7071C1.90237 12.3166 1.90237 11.6834 2.29289 11.2929L9.29289 4.29289C9.68342 3.90237 10.3166 3.90237 10.7071 4.29289Z" fill="#303030"/>
+              </svg>
             </button>
           )}
           {showTitleIcon && (
             isAssignmentsRoot
-              ? <LayoutGrid size={20} color="#A9A9A9" strokeWidth={1.8} />
-              : <Sparkles size={18} color="#AAAAAA" />
+              ? <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.5 11.6667H11.6667V17.5H17.5V11.6667Z" stroke="#A9A9A9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M8.33333 11.6667H2.5V17.5H8.33333V11.6667Z" stroke="#A9A9A9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M17.5 2.5H11.6667V8.33333H17.5V2.5Z" stroke="#A9A9A9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M8.33333 2.5H2.5V8.33333H8.33333V2.5Z" stroke="#A9A9A9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            : <Sparkles size={18} color="#AAAAAA" />
           )}
           <span
             style={{
@@ -112,19 +119,10 @@ export default function Header({ title, showBack = true, disableBack = false, sh
               background: "#F5F5F5",
             }}
           >
-            {/* Bell icon — outlined style */}
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#4B4B4B"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            {/* Bell icon — Figma */}
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke="#303030" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21" stroke="#303030" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             {/* Orange dot badge */}
             <span
@@ -230,7 +228,9 @@ export default function Header({ title, showBack = true, disableBack = false, sh
               </span>
 
               {/* Chevron */}
-              <ChevronDown size={24} color="#303030" strokeWidth={2.5} />
+              <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0.75 0.75L6.75 6.75L12.75 0.75" stroke="#303030" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </div>
           </div>
         </div>

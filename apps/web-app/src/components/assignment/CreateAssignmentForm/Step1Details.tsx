@@ -1,10 +1,86 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { X, ChevronDown, Mic, Upload, CalendarPlus, Plus } from "lucide-react";
 import { useAssignmentStore } from "@/store/assignmentStore";
 import { QuestionTypeRow } from "@/types/assignment";
 import Stepper from "@/components/ui/Stepper";
+
+const UploadCloudIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clipPath="url(#clip0_2_9459)">
+      <path d="M7.99996 16L12 12L16 16M12 12V21M20.39 18.39C21.3653 17.8583 22.1358 17.0169 22.5798 15.9986C23.0239 14.9804 23.1162 13.8432 22.8422 12.7667C22.5682 11.6901 21.9434 10.7355 21.0666 10.0534C20.1898 9.37137 19.1108 9.00072 18 8.99998H16.74C16.4373 7.82923 15.8731 6.74232 15.0899 5.82098C14.3067 4.89964 13.3248 4.16783 12.2181 3.68059C11.1113 3.19335 9.90851 2.96334 8.70008 3.00787C7.49164 3.05239 6.30903 3.37028 5.24114 3.93765C4.17325 4.50501 3.24787 5.30709 2.53458 6.28357C1.82129 7.26004 1.33865 8.38552 1.12294 9.57538C0.90723 10.7652 0.964065 11.9885 1.28917 13.1532C1.61428 14.318 2.1992 15.3938 2.99996 16.3" stroke="#1E1E1E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </g>
+    <defs>
+      <clipPath id="clip0_2_9459">
+        <rect width="24" height="24" fill="white"/>
+      </clipPath>
+    </defs>
+  </svg>
+);
+
+const CalendarPlusIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fillRule="evenodd" clipRule="evenodd" d="M2 8C2 5.23858 4.23858 3 7 3H17C19.7614 3 22 5.23858 22 8V17C22 19.7614 19.7614 22 17 22H7C4.23858 22 2 19.7614 2 17V8ZM7 5C5.34315 5 4 6.34315 4 8V17C4 18.6569 5.34315 20 7 20H17C18.6569 20 20 18.6569 20 17V8C20 6.34315 18.6569 5 17 5H7Z" fill="#2B2B2B"/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M8 2C8.55228 2 9 2.44772 9 3V6C9 6.55228 8.55228 7 8 7C7.44772 7 7 6.55228 7 6V3C7 2.44772 7.44772 2 8 2Z" fill="#2B2B2B"/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M16 2C16.5523 2 17 2.44772 17 3V6C17 6.55228 16.5523 7 16 7C15.4477 7 15 6.55228 15 6V3C15 2.44772 15.4477 2 16 2Z" fill="#2B2B2B"/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M12 9C12.5523 9 13 9.44772 13 10V12H15C15.5523 12 16 12.4477 16 13C16 13.5523 15.5523 14 15 14H13V16C13 16.5523 12.5523 17 12 17C11.4477 17 11 16.5523 11 16L11 14H9C8.44772 14 8 13.5523 8 13C8 12.4477 8.44772 12 9 12H11V10C11 9.44772 11.4477 9 12 9Z" fill="#2B2B2B"/>
+  </svg>
+);
+
+const QuestionTypeCloseIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 4L4 12M4 4L12 12" stroke="#303030" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const QuestionTypeDownIcon = ({ open }: { open: boolean }) => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    style={{
+      transform: open ? "rotate(180deg)" : "none",
+      transition: "transform 0.18s",
+    }}
+  >
+    <path d="M4 6L8 10L12 6" stroke="#303030" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const AddQuestionTypeIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fillRule="evenodd" clipRule="evenodd" d="M2.5 9.99996C2.5 9.53972 2.8731 9.16663 3.33333 9.16663H16.6667C17.1269 9.16663 17.5 9.53972 17.5 9.99996C17.5 10.4602 17.1269 10.8333 16.6667 10.8333H3.33333C2.8731 10.8333 2.5 10.4602 2.5 9.99996Z" fill="white"/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M10.0002 2.5C10.4604 2.5 10.8335 2.8731 10.8335 3.33333L10.8335 16.6667C10.8335 17.1269 10.4604 17.5 10.0002 17.5C9.53992 17.5 9.16683 17.1269 9.16683 16.6667L9.16683 3.33333C9.16683 2.8731 9.53993 2.5 10.0002 2.5Z" fill="white"/>
+  </svg>
+);
+
+const AdditionalInfoMicIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 73 63" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g filter="url(#filter0_dd_2_9548)">
+      <path fillRule="evenodd" clipRule="evenodd" d="M34.7725 24.5455C34.7725 23.0393 35.9935 21.8182 37.4998 21.8182H38.8634C40.3696 21.8182 41.5907 23.0393 41.5907 24.5455V28.6364C41.5907 30.1427 40.3696 31.3637 38.8634 31.3637H37.4998C35.9935 31.3637 34.7725 30.1427 34.7725 28.6364V24.5455ZM33.4089 27.2728C33.7854 27.2728 34.0907 27.578 34.0907 27.9546V28.6364C34.0907 30.5192 35.617 32.0455 37.4998 32.0455H38.1816H38.8634C40.7462 32.0455 42.2725 30.5192 42.2725 28.6364V27.9546C42.2725 27.578 42.5778 27.2728 42.9543 27.2728C43.3309 27.2728 43.6361 27.578 43.6361 27.9546V28.6364C43.6361 31.2723 41.4993 33.4091 38.8634 33.4091V34.7728C38.8634 35.1493 38.5582 35.4546 38.1816 35.4546C37.805 35.4546 37.4998 35.1493 37.4998 34.7728L37.4998 33.4091C34.8639 33.4091 32.7271 31.2723 32.7271 28.6364V27.9546C32.7271 27.578 33.0323 27.2728 33.4089 27.2728Z" fill="#303030"/>
+    </g>
+    <defs>
+      <filter id="filter0_dd_2_9548" x="-2.72727" y="-1.36359" width="81.8183" height="92.7273" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+        <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+        <feOffset dy="21.8182"/>
+        <feGaussianBlur stdDeviation="16.3636"/>
+        <feComposite in2="hardAlpha" operator="out"/>
+        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"/>
+        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_9548"/>
+        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+        <feOffset dy="10.9091"/>
+        <feGaussianBlur stdDeviation="16.3636"/>
+        <feComposite in2="hardAlpha" operator="out"/>
+        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.12 0"/>
+        <feBlend mode="normal" in2="effect1_dropShadow_2_9548" result="effect2_dropShadow_2_9548"/>
+        <feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_2_9548" result="shape"/>
+      </filter>
+    </defs>
+  </svg>
+);
 
 // ── Custom dropdown — replaces native <select> to stay within layout ──────────
 function QuestionTypeSelect({
@@ -69,19 +145,17 @@ function QuestionTypeSelect({
       </button>
 
       {/* Chevron icon */}
-      <ChevronDown
-        size={16}
-        strokeWidth={1.5}
-        color="#303030"
+      <div
         style={{
           position: "absolute",
           right: 14,
           top: "50%",
-          transform: open ? "translateY(-50%) rotate(180deg)" : "translateY(-50%)",
+          transform: "translateY(-50%)",
           pointerEvents: "none",
-          transition: "transform 0.18s",
         }}
-      />
+      >
+        <QuestionTypeDownIcon open={open} />
+      </div>
 
       {/* Dropdown list */}
       {open && (
@@ -155,7 +229,7 @@ interface FieldError {
 interface Step1DetailsProps {
   formData: {
     dueDate: string;
-    fileName?: string | null;
+    fileName?: string;
     additionalInfo: string;
     questionTypes: QuestionTypeRow[];
   };
@@ -164,7 +238,7 @@ interface Step1DetailsProps {
   dragOver: boolean;
   setDragOver: (value: boolean) => void;
   handleFileChange: (file: File) => void;
-  fileInputRef: React.RefObject<HTMLInputElement>;
+  fileInputRef: React.RefObject<HTMLInputElement | null>;
   addQuestionType: () => void;
   updateFormData: (data: Partial<Step1DetailsProps["formData"]>) => void;
   totalQuestions: number;
@@ -223,7 +297,7 @@ function QuestionTypeRowComponent({ row }: { row: QuestionTypeRow }) {
           ((e.currentTarget as HTMLButtonElement).style.opacity = "1")
         }
       >
-        <X size={16} strokeWidth={1.5} />
+        <QuestionTypeCloseIcon />
       </button>
     </div>
   );
@@ -371,7 +445,7 @@ export default function Step1Details({
                 flexShrink: 0,
               }}
             >
-              <Upload size={24} strokeWidth={2.5} color="#1E1E1E" />
+              <UploadCloudIcon />
             </div>
 
             {/* Text block: Frame 1618872516 */}
@@ -565,9 +639,7 @@ export default function Step1Details({
                     (e.target as HTMLInputElement).style.borderColor = "#DADADA";
                 }}
               />
-              <CalendarPlus
-                size={24}
-                color="#2B2B2B"
+              <div
                 style={{
                   position: "absolute",
                   right: 16,
@@ -575,7 +647,9 @@ export default function Step1Details({
                   transform: "translateY(-50%)",
                   pointerEvents: "none",
                 }}
-              />
+              >
+                <CalendarPlusIcon />
+              </div>
             </div>
             {errors.dueDate && (
               <p style={{ fontSize: 12, color: "#E53935", margin: 0 }}>{errors.dueDate}</p>
@@ -684,7 +758,7 @@ export default function Step1Details({
                     flexShrink: 0,
                   }}
                 >
-                  <Plus size={20} strokeWidth={2} color="#FFFFFF" />
+                  <AddQuestionTypeIcon />
                 </span>
                 <span
                   style={{
@@ -951,7 +1025,7 @@ export default function Step1Details({
                 ((e.currentTarget as HTMLButtonElement).style.background = "#F0F0F0")
               }
             >
-              <Mic size={16} color="#303030" strokeWidth={1.5} />
+              <AdditionalInfoMicIcon />
             </button>
           </div>
         </div>
