@@ -84,3 +84,479 @@ input:-webkit-autofill:active {
   display: flex;
   align-items: center;
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MOBILE RESPONSIVE STYLES — max-width: 420px
+   All styles use !important to override inline styles on React components.
+   This lives in globals.css to avoid styled-jsx scoping limitations.
+───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 420px) {
+
+  /* Fix body scroll on mobile */
+  body {
+    overflow: auto !important;
+  }
+
+  /* ── Header ───────────────────────────────────────────────────────────── */
+  .app-header {
+    border-radius: 16px !important;
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    margin: 8px 10px 0 !important;
+  }
+
+  .app-header__inner {
+    height: 56px !important;
+    padding-left: 12px !important;
+    padding-right: 16px !important;
+  }
+
+  .app-header__left { gap: 6px !important; }
+  .app-header__right { gap: 10px !important; }
+
+  .app-header__back {
+    width: 48px !important;
+    height: 48px !important;
+    background: rgba(255, 255, 255, 0.25) !important;
+    box-shadow: none !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+  }
+
+  .app-header__user {
+    width: auto !important;
+    height: 36px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  /* Hide name + chevron — show avatar only */
+  .app-header__user-text,
+  .app-header__user-name,
+  .app-header__user-chevron {
+    display: none !important;
+  }
+
+  /* ── AppShell layout: hide sidebar, full-width content ───────────────── */
+  .app-shell {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow: auto !important;
+  }
+
+  .app-shell__inner {
+    flex-direction: column !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow: auto !important;
+  }
+
+  /* Hide the desktop sidebar entirely */
+  .app-shell__sidebar-wrap {
+    display: none !important;
+  }
+
+  /* Content takes full width */
+  .app-shell__content {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow: auto !important;
+    padding: 0 !important;
+  }
+  /* ── Screen 1: Assignment List ────────────────────────────────────────── */
+
+  /* Card compact layout */
+  .assignment-card {
+    --assignment-card-padding: 20px !important;
+    --assignment-card-height: 116px !important;
+    --assignment-card-gap: 24px !important;
+    --assignment-card-row-gap: 32px !important;
+    --assignment-card-row-height: 76px !important;
+    --assignment-card-title-height: 25px !important;
+    --assignment-card-title-size: 18px !important;
+    --assignment-card-meta-size: 16px !important;
+    height: 116px !important;
+    padding: 20px !important;
+    border-radius: 24px !important;
+    background: rgba(255, 255, 255, 0.75) !important;
+  }
+
+  /* Empty state */
+  .empty-state {
+    padding: 0 !important;
+  }
+
+  .empty-state__frame {
+    position: absolute !important;
+    width: 373px !important;
+    height: 657px !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    gap: 32px !important;
+  }
+
+  .empty-state__copy {
+    width: 373px !important;
+    gap: 12px !important;
+  }
+
+  .empty-state__title {
+    font-size: 20px !important;
+    letter-spacing: -0.04em !important;
+    color: #303030 !important;
+    margin-top: 0 !important;
+  }
+
+  .empty-state__desc {
+    font-size: 16px !important;
+    line-height: 1.4 !important;
+    letter-spacing: -0.04em !important;
+    color: rgba(94, 94, 94, 0.8) !important;
+    max-width: 373px !important;
+  }
+
+  .empty-state__button {
+    width: 277px !important;
+    height: 46px !important;
+    padding: 12px 24px !important;
+    background: #181818 !important;
+    border: none !important;
+    border-radius: 48px !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    letter-spacing: -0.04em !important;
+    margin-top: 0 !important;
+  }
+
+  .empty-state__button svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .assignment-list {
+    align-items: center !important;
+  }
+
+  .assignment-list__content {
+    padding: 0 10px 140px !important;
+    width: 373px !important;
+    min-height: 816px !important;
+    margin: 0 auto !important;
+  }
+
+  .assignment-list__mobile-bar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 373px !important;
+    height: 48px !important;
+    gap: 24px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .assignment-list__mobile-back {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 999px !important;
+    border: none !important;
+    background: rgba(255, 255, 255, 0.25) !important;
+    backdrop-filter: blur(12px) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+  }
+
+  .assignment-list__mobile-title {
+    flex: 1 !important;
+    text-align: center !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    line-height: 1.4 !important;
+    letter-spacing: -0.04em !important;
+    color: #303030 !important;
+    margin-right: 48px !important;
+  }
+
+  .assignment-list__title {
+    display: none !important;
+  }
+
+  .assignment-list__filter {
+    height: 64px !important;
+    padding: 0 16px !important;
+    gap: 36px !important;
+    border-radius: 16px !important;
+  }
+
+  .assignment-list__filter-btn {
+    font-weight: 400 !important;
+  }
+
+  .assignment-list__search {
+    width: 228px !important;
+  }
+
+  .assignment-list__search-input {
+    font-weight: 400 !important;
+  }
+
+  /* Single column cards */
+  .assignment-list__grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .assignment-list__footer {
+    display: none !important;
+  }
+
+  .assignment-list__fab {
+    position: absolute !important;
+    right: 20px !important;
+    bottom: 86px !important;
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 50% !important;
+    border: none !important;
+    background: #ffffff !important;
+    box-shadow: 0px 16px 48px rgba(0,0,0,0.12), 0px 32px 48px rgba(0,0,0,0.2) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    z-index: 5 !important;
+  }
+
+  .assignment-list__mobile-nav {
+    position: absolute !important;
+    left: 50% !important;
+    bottom: -6px !important;
+    transform: translateX(-50%) !important;
+    width: 393px !important;
+    height: 128px !important;
+    display: block !important;
+    z-index: 4 !important;
+  }
+
+  .assignment-list__mobile-nav svg {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    pointer-events: none !important;
+  }
+
+  .assignment-list__mobile-nav-actions {
+    position: absolute !important;
+    left: 50% !important;
+    bottom: 17px !important;
+    transform: translateX(-50%) !important;
+    width: 373px !important;
+    height: 72px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 8px 24px !important;
+    gap: 43px !important;
+    pointer-events: none !important;
+  }
+
+  .assignment-list__mobile-nav-btn {
+    width: 52px !important;
+    height: 52px !important;
+    border-radius: 26px !important;
+    background: transparent !important;
+    border: none !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+  }
+
+  /* ── Screen 3: Create Assignment Form ─────────────────────────────────── */
+
+  /* Page title: hidden on mobile — Header shows ← Create Assignment */
+  .create-assignment__title {
+    display: none !important;
+  }
+
+  .create-assignment {
+    padding: 0 10px 12px !important;
+  }
+
+  .create-assignment__body {
+    max-width: 373px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Form card */
+  .create-details {
+    padding: 32px 16px !important;
+    gap: 24px !important;
+    border-radius: 32px !important;
+  }
+
+  .create-details__content {
+    gap: 16px !important;
+  }
+
+  /* Upload zone: real CSS border + #F6F6F6 background */
+  .create-details__upload-zone {
+    height: 202px !important;
+    padding: 24px 32px !important;
+    gap: 16px !important;
+    border-radius: 24px !important;
+    background: #F6F6F6 !important;
+    background-image: none !important;
+    border: 1.75px dashed rgba(0, 0, 0, 0.2) !important;
+  }
+
+  .create-details__upload-subtitle {
+    font-size: 16px !important;
+  }
+
+  .create-details__label {
+    font-size: 16px !important;
+  }
+
+  /* Desktop question section: hidden on mobile */
+  .desktop-qt {
+    display: none !important;
+  }
+
+  /* Mobile question section: shown on mobile */
+  .mobile-qt {
+    display: flex !important;
+  }
+
+  /* Mobile stepper: override inline dimensions */
+  .mobile-stepper {
+    height: 38px !important;
+    width: 100% !important;
+    padding: 8px !important;
+  }
+
+  /* Additional Info section: hidden (not in Figma mobile) */
+  .create-details__additional {
+    display: none !important;
+  }
+
+  /* Footer: sticky blur bar */
+  .create-footer {
+    position: sticky !important;
+    bottom: 0 !important;
+    padding: 8px 10px !important;
+    background: rgba(255, 255, 255, 0.01) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    margin: 0 -10px !important;
+    width: calc(100% + 20px) !important;
+    box-sizing: border-box !important;
+  }
+
+  .create-footer__row {
+    justify-content: center !important;
+    gap: 13px !important;
+    height: auto !important;
+  }
+
+  /* Previous button */
+  #form-prev-btn {
+    width: 134px !important;
+    height: 46px !important;
+    font-size: 16px !important;
+  }
+
+  /* Continue/Next button */
+  #form-next-btn {
+    width: 106px !important;
+    height: 46px !important;
+    font-size: 16px !important;
+  }
+
+  /* ── Screen 4: Output Page ────────────────────────────────────────────── */
+
+  /* Outer container: grey → white */
+  .output-outer {
+    background: #FFFFFF !important;
+    border-radius: 40px !important;
+    padding: 9px !important;
+    gap: 10px !important;
+  }
+
+  /* Dark header: semi-transparent → solid #303030 */
+  .output-header {
+    background: #303030 !important;
+    padding: 24px 16px !important;
+    min-height: auto !important;
+  }
+
+  /* Header intro text */
+  .output-header__intro {
+    font-size: 14px !important;
+    line-height: 17px !important;
+    color: #F0F0F0 !important;
+    font-weight: 700 !important;
+  }
+
+  /* Download button: desktop pill → mobile icon-only */
+  .output-download-desktop { display: none !important; }
+  .output-download-mobile  { display: flex !important; }
+
+  /* Paper card */
+  .output-paper {
+    width: 100% !important;
+    background: #F6F6F6 !important;
+    padding: 24px 16px !important;
+    min-height: auto !important;
+    border-radius: 32px !important;
+    gap: 24px !important;
+  }
+
+  /* School title: 32px → 20px */
+  .output-paper__title {
+    font-size: 20px !important;
+    line-height: 130% !important;
+    min-height: auto !important;
+  }
+
+  /* Time/Marks: row → column, 18px → 14px */
+  .output-paper__meta {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    height: auto !important;
+    gap: 10px !important;
+  }
+  .output-paper__meta-item {
+    font-size: 14px !important;
+    height: auto !important;
+  }
+
+  /* All questions compulsory text */
+  .output-paper__compulsory { height: auto !important; }
+  .output-paper__compulsory-text {
+    font-size: 14px !important;
+    height: auto !important;
+  }
+
+  /* Student info */
+  .output-paper__student { height: auto !important; }
+  .output-paper__student-line {
+    font-size: 14px !important;
+    height: auto !important;
+  }
+
+  /* QuestionSection child component */
+  .qs-title { font-size: 16px !important; }
+  .qs-subtitle { font-size: 14px !important; }
+  .qs-instruction { font-size: 14px !important; }
+
+  /* AnswerKeySection child component */
+  .ak-label { font-size: 16px !important; }
+}
