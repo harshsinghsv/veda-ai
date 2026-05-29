@@ -1,12 +1,14 @@
 import { Worker, Job } from 'bullmq';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import OpenAI from 'openai';
 import { Assignment } from '../models/Assignment';
 import redisConnection from '../config/redis';
 import { AssignmentJobData } from '../types';
 import { broadcastAssignmentUpdate } from '../websocket/wsServer';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+const openai = new OpenAI({
+  apiKey: process.env.CEREBRAS_API_KEY!,
+  baseURL: 'https://api.cerebras.ai/v1',
+});
 
 /**
  * Each "topic" in our system is a question type chosen by the teacher:
@@ -118,7 +120,7 @@ IMPORTANT:
 function parseResponse(rawText: string) {
   const cleaned = rawText.replace(/```json\n?|\n?```/g, '').trim();
 
-  // Sometimes Gemini wraps in extra text — try to extract JSON object
+  // Sometimes the model wraps in extra text — try to extract JSON object
   const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
   if (!jsonMatch) throw new Error('No JSON object found in response');
 
@@ -154,8 +156,21 @@ export const assignmentWorker = new Worker<AssignmentJobData>(
 
     try {
       const prompt = buildPrompt(job.data);
-      const result = await model.generateContent(prompt);
-      const rawText = result.response.text();
+      const result = await openai.chat.completions.create({
+        model: 'zai-glm-4.7',
+        messages: [
+          {
+            role: 'system',
+            content: 'You generate JSON only. No markdown, no code fences.',
+          },
+          { role: 'user', content: prompt },
+        ],
+        temperature: 0.2,
+      });
+      const rawText = result.choices[0]?.message?.content ?? '';
+      if (!rawText) {
+        throw new Error('Empty response from Cerebras');
+      }
 
       const questions = parseResponse(rawText);
 
