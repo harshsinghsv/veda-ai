@@ -33,7 +33,7 @@ export default function AppShell({
         display: "flex",
         justifyContent: "center",
         background: "linear-gradient(180deg, #E7E7E7 0%, #DCDCDC 100%)",
-        overflow: "hidden",
+        overflow: "visible",
       }}
     >
     {/*
@@ -53,8 +53,7 @@ export default function AppShell({
       }}
     >
       {/* ── LEFT: Sidebar — white floating card ── */}
-      {/* clip-path clips hard at left=0, allows shadow to bleed right/top/bottom */}
-      <div style={{ clipPath: "inset(0 -60px -60px 0)", flexShrink: 0 }}>
+      <div style={{ flexShrink: 0 }}>
         <aside
           style={{
             width: 304,
@@ -62,7 +61,7 @@ export default function AppShell({
             height: "100%",
             background: "#ffffff",
             borderRadius: 16,
-            boxShadow: "6px 0 32px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.06)",
+            boxShadow: "12px 16px 28px rgba(0, 0, 0, 0.16), 4px 6px 12px rgba(0, 0, 0, 0.08)",
             display: "flex",
             flexDirection: "column",
             overflow: "hidden",
