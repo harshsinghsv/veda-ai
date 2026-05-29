@@ -59,6 +59,7 @@ export default function AnswerKeySection({ paper }: { paper: GeneratedPaper }) {
 
           {/* "Answer Key:" — bold 18px */}
           <p
+            className="ak-label"
             style={{
               margin: "0 0 12px 0",
               fontSize: 18,

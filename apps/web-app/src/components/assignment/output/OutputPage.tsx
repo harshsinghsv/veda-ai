@@ -19,7 +19,7 @@ const primary = "#303030";
 function PaperContent({ paper }: { paper: GeneratedPaper }) {
   return (
     <div
-      className="paper-font"
+      className="output-paper paper-font"
       style={{
         display: "flex",
         flexDirection: "column",
@@ -38,6 +38,7 @@ function PaperContent({ paper }: { paper: GeneratedPaper }) {
     >
       {/* ── Delhi Public School Header ── */}
       <div
+        className="output-paper__title"
         style={{
           width: "100%",
           maxWidth: 996,
@@ -62,6 +63,7 @@ function PaperContent({ paper }: { paper: GeneratedPaper }) {
 
       {/* ── Frame 1984077298: Time Allowed + Maximum Marks ── */}
       <div
+        className="output-paper__meta"
         style={{
           display: "flex",
           flexDirection: "row",
@@ -75,6 +77,7 @@ function PaperContent({ paper }: { paper: GeneratedPaper }) {
         }}
       >
         <span
+          className="output-paper__meta-item"
           style={{
             fontSize: 18,
             fontWeight: 600,
@@ -89,6 +92,7 @@ function PaperContent({ paper }: { paper: GeneratedPaper }) {
           Time Allowed: {paper.timeAllowed}
         </span>
         <span
+          className="output-paper__meta-item"
           style={{
             fontSize: 18,
             fontWeight: 600,
@@ -119,6 +123,7 @@ function PaperContent({ paper }: { paper: GeneratedPaper }) {
         }}
       >
         <span
+          className="output-paper__compulsory-text"
           style={{
             width: "100%",
             fontSize: 18,
@@ -137,6 +142,7 @@ function PaperContent({ paper }: { paper: GeneratedPaper }) {
 
       {/* ── Frame 1984077300: Student info fields ── */}
       <div
+        className="output-paper__student"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -154,6 +160,7 @@ function PaperContent({ paper }: { paper: GeneratedPaper }) {
         ].map((line) => (
           <span
             key={line}
+            className="output-paper__student-line"
             style={{
               fontSize: 18,
               fontWeight: 600,
@@ -201,11 +208,75 @@ export default function OutputPage() {
     ? `Here is your customized question paper for ${formData.class} ${formData.subject}${formData.school ? ` at ${formData.school}` : ""}.`
     : "No assignment generated yet.";
 
+  // ── Empty state: not generating, no output ──────────────────────────────
+  if (!isGenerating && !generatedOutput) {
+    return (
+      <div style={{ padding: 0, height: "100%" }}>
+        <div
+          className="output-outer"
+          style={{
+            background: "#5E5E5E",
+            borderRadius: 32,
+            padding: 20,
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            gap: 12,
+            boxSizing: "border-box",
+          }}
+        >
+          <div
+            className="output-header"
+            style={{
+              background: "rgba(24, 24, 24, 0.8)",
+              borderRadius: 32,
+              padding: "24px 32px",
+              display: "flex",
+              flexDirection: "column",
+              gap: 24,
+              alignItems: "flex-start",
+            }}
+          >
+            <p
+              className="output-header__intro"
+              style={{
+                margin: 0,
+                width: "100%",
+                fontSize: 20,
+                fontWeight: 700,
+                color: "#FFFFFF",
+                letterSpacing: "-0.04em",
+                lineHeight: "140%",
+                fontFamily: bricolage,
+              }}
+            >
+              No assignment generated yet.
+            </p>
+          </div>
+          <div
+            style={{
+              padding: "48px 32px",
+              textAlign: "center",
+              color: "#8C8C8C",
+              fontFamily: inter,
+              fontSize: 16,
+              background: "#FFFFFF",
+              borderRadius: 32,
+            }}
+          >
+            Generate an assignment to see your question paper here.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ padding: 0, height: "100%" }}>
       {isGenerating ? (
         /* ── Full-height generating state ── */
         <div
+          className="output-generating"
           style={{
             background: "rgba(24, 24, 24, 0.92)",
             borderRadius: 32,
@@ -260,6 +331,7 @@ export default function OutputPage() {
       ) : (
         /* ── Outer dark container: Frame 1618872395 ── */
         <div
+        className="output-outer"
         style={{
           background: "#5E5E5E",
           borderRadius: 32,
@@ -274,6 +346,7 @@ export default function OutputPage() {
         {/* ── Dark header bar: Frame 1618872450 ── */}
         {/* Figma: column layout, rgba(24,24,24,0.8), 32px radius, 24px/32px padding, gap 24px */}
         <div
+          className="output-header"
           style={{
             background: "rgba(24, 24, 24, 0.8)",
             borderRadius: 32,
@@ -290,6 +363,7 @@ export default function OutputPage() {
         >
           {/* Frame 1618872453 > Frame 1984077288 — title text */}
           <p
+            className="output-header__intro"
             style={{
               margin: 0,
               width: "100%",
@@ -306,6 +380,7 @@ export default function OutputPage() {
 
           {/* Frame 1618872463 > Frame 1618872346 — Download button */}
           <div
+            className="output-download-desktop"
             style={{
               display: "flex",
               flexDirection: "row",
@@ -371,6 +446,29 @@ export default function OutputPage() {
               </span>
             </button>
           </div>
+
+          {/* Mobile icon-only download button */}
+          <button
+            className="output-download-mobile"
+            id="download-pdf-btn-mobile"
+            onClick={handleDownload}
+            style={{
+              display: "none",
+              width: 36,
+              height: 36,
+              background: "rgba(246, 246, 246, 0.1)",
+              borderRadius: 100,
+              border: "none",
+              cursor: "pointer",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fillRule="evenodd" clipRule="evenodd" d="M10 2.5C10.4602 2.5 10.8333 2.8731 10.8333 3.33333V11.1548L13.2441 8.74408C13.5696 8.41864 14.0972 8.41864 14.4226 8.74408C14.7481 9.06951 14.7481 9.59715 14.4226 9.92259L10.5893 13.7559C10.2639 14.0814 9.73622 14.0814 9.41079 13.7559L5.57745 9.92259C5.25201 9.59715 5.25201 9.06951 5.57745 8.74408C5.90289 8.41864 6.43053 8.41864 6.75596 8.74408L9.16667 11.1548V3.33333C9.16667 2.8731 9.53976 2.5 10 2.5ZM3.33333 14.1667C3.79357 14.1667 4.16667 14.5398 4.16667 15V16.6667H15.8333V15C15.8333 14.5398 16.2064 14.1667 16.6667 14.1667C17.1269 14.1667 17.5 14.5398 17.5 15V16.6667C17.5 17.5871 16.7538 18.3333 15.8333 18.3333H4.16667C3.24619 18.3333 2.5 17.5871 2.5 16.6667V15C2.5 14.5398 2.8731 14.1667 3.33333 14.1667Z" fill="white"/>
+            </svg>
+          </button>
         </div>
 
         {/* ── White paper card: Frame 1618872449 ── */}

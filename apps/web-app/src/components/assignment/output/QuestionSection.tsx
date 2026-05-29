@@ -34,6 +34,7 @@ export default function QuestionSection({ section }: { section: Section }) {
         }}
       >
         <h2
+          className="qs-title"
           style={{
             margin: 0,
             width: "100%",
@@ -68,6 +69,7 @@ export default function QuestionSection({ section }: { section: Section }) {
       >
         {section.questionType && (
           <p
+            className="qs-subtitle"
             style={{
               margin: 0,
               fontSize: 18,
@@ -83,6 +85,7 @@ export default function QuestionSection({ section }: { section: Section }) {
           </p>
         )}
         <p
+          className="qs-instruction"
           style={{
             margin: 0,
             fontSize: 18,
