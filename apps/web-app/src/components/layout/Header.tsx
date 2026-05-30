@@ -4,7 +4,6 @@ import React from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { Sparkles } from "lucide-react";
-import { useUserProfileStore, avatarUrl } from "@/store/userProfileStore";
 
 interface HeaderProps {
   title: string;
@@ -18,8 +17,6 @@ export default function Header({ title, showBack = true, disableBack = false, sh
   const pathname = usePathname();
   const isAssignmentsRoot = pathname === "/assignments";
   const { user } = useUser();
-  const avatarSeed = useUserProfileStore((s) => s.avatarSeed);
-
   const displayName =
     user?.firstName
       ? `${user.firstName}${user.lastName ? " " + user.lastName : ""}`
@@ -198,7 +195,7 @@ export default function Header({ title, showBack = true, disableBack = false, sh
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={avatarUrl(avatarSeed)}
+                src="/pfp.png"
                 alt={displayName}
                 width={32}
                 height={32}

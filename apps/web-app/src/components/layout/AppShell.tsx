@@ -1,11 +1,9 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { useUser, useClerk } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import React from "react";
+import { useUser } from "@clerk/nextjs";
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
-import { useUserProfileStore } from "@/store/userProfileStore";
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -24,18 +22,9 @@ export default function AppShell({
   showTitleIcon = true,
   footerSlot,
 }: AppShellProps) {
-  const { user, isLoaded } = useUser();
-  const isOnboarded = useUserProfileStore((s) => s.isOnboarded);
-  const router = useRouter();
+  const { isLoaded } = useUser();
 
-  // Redirect to onboarding if not done yet
-  useEffect(() => {
-    if (isLoaded && user && !isOnboarded) {
-      router.replace("/onboarding");
-    }
-  }, [isLoaded, user, isOnboarded, router]);
-
-  if (!isLoaded || !user) {
+  if (!isLoaded) {
     return (
       <div style={{ minHeight: "100vh", background: "linear-gradient(180deg, #E7E7E7 0%, #DCDCDC 100%)", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{ width: 36, height: 36, border: "3px solid rgba(0,0,0,0.1)", borderTopColor: "#E8490F", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
