@@ -7,6 +7,7 @@ import { useAssignmentStore } from "@/store/assignmentStore";
 import { GeneratedPaper } from "@/types/assignment";
 import QuestionSection from "@/components/assignment/output/QuestionSection";
 import AnswerKeySection from "@/components/assignment/output/AnswerKeySection";
+import { useUser } from "@clerk/nextjs";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 
@@ -57,8 +58,8 @@ function PaperContent({ paper }: { paper: GeneratedPaper }) {
         }}
       >
         <span>{paper.school}</span>
-        <span>Subject: {paper.subject}</span>
-        <span>Class: {paper.class}</span>
+        <span style={{ fontSize: 24, fontWeight: 600, lineHeight: "160%", letterSpacing: "-0.04em" }}>Subject: {paper.subject}</span>
+        <span style={{ fontSize: 24, fontWeight: 600, lineHeight: "160%", letterSpacing: "-0.04em" }}>Class: {paper.class || "____"}</span>
       </div>
 
       {/* ── Frame 1984077298: Time Allowed + Maximum Marks ── */}
@@ -156,7 +157,7 @@ function PaperContent({ paper }: { paper: GeneratedPaper }) {
         {[
           "Name: ______________________",
           "Roll Number: ________________",
-          `Class: ${paper.class ?? "____"} Section: __________`,
+          `Class: ${paper.class || "____"} Section: __________`,
         ].map((line) => (
           <span
             key={line}
@@ -198,15 +199,47 @@ export default function OutputPage() {
   const formData = useAssignmentStore((s) => s.formData);
 
   const handleDownload = () => {
-    window.print();
+    const paperEl = document.querySelector<HTMLElement>(".output-paper");
+    if (!paperEl) { window.print(); return; }
+
+    const paperHTML = paperEl.outerHTML;
+    const iframe = document.createElement("iframe");
+    iframe.style.cssText = "position:fixed;top:-9999px;left:-9999px;width:210mm;height:297mm;border:none;";
+    document.body.appendChild(iframe);
+
+    const doc = iframe.contentDocument!;
+    doc.open();
+    doc.write(
+      '<!DOCTYPE html><html><head><meta charset="utf-8"/><title>Question Paper</title>' +
+      '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>' +
+      '<style>' +
+      '* { box-sizing: border-box; margin: 0; padding: 0; }' +
+      'body { font-family: Inter, sans-serif; font-size: 13px; color: #000; background: #fff; padding: 20mm 18mm; }' +
+      '@page { margin: 0; size: A4; }' +
+      '@media print { body { padding: 12mm 14mm; } }' +
+      '</style></head><body>' + paperHTML + '</body></html>'
+    );
+    doc.close();
+
+    iframe.onload = () => {
+      setTimeout(() => {
+        iframe.contentWindow?.focus();
+        iframe.contentWindow?.print();
+        setTimeout(() => document.body.removeChild(iframe), 1000);
+      }, 600);
+    };
   };
 
-  // Intro message shown in the dark header
+  const { user } = useUser();
+  const firstName = user?.firstName || user?.fullName?.split(" ")[0] || "there";
+
+  // Intro message — "Certainly, [Name]! Here are customised Question Paper for your [Grade] [Subject] classes."
   const introText = isGenerating
-    ? "Generating your question paper…"
+    ? `Generating your question paper…`
     : generatedOutput
-    ? `Here is your customized question paper for ${formData.class} ${formData.subject}${formData.school ? ` at ${formData.school}` : ""}.`
-    : "No assignment generated yet.";
+      ? `Certainly, ${firstName}! Here are customized Question Paper for your${generatedOutput.class ? ` ${generatedOutput.class}` : ""
+      }${generatedOutput.subject ? ` ${generatedOutput.subject}` : ""} classes.`
+      : "No assignment generated yet.";
 
   // ── Empty state: not generating, no output ──────────────────────────────
   if (!isGenerating && !generatedOutput) {
@@ -217,7 +250,10 @@ export default function OutputPage() {
           style={{
             background: "#5E5E5E",
             borderRadius: 32,
-            padding: 20,
+            paddingTop: 20,
+            paddingRight: 20,
+            paddingBottom: 32,
+            paddingLeft: 20,
             width: "100%",
             display: "flex",
             flexDirection: "column",
@@ -278,225 +314,249 @@ export default function OutputPage() {
         <div
           className="output-generating"
           style={{
-            background: "rgba(24, 24, 24, 0.92)",
+            background: "#5E5E5E",
             borderRadius: 32,
             width: "100%",
-            minHeight: "calc(100vh - 120px)",
+            height: "100%",
+            minHeight: "100%",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            justifyContent: "center",
-            gap: 24,
+            justifyContent: "stretch",
             boxSizing: "border-box",
-            padding: 40,
+            padding: 20,
           }}
         >
-          <Lottie
-            animationData={generatingAnimation}
-            loop
-            autoplay
-            style={{ width: 200, height: 200 }}
-          />
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-            <p
-              style={{
-                margin: 0,
-                fontSize: 22,
-                fontWeight: 700,
-                color: "#FFFFFF",
-                letterSpacing: "-0.04em",
-                lineHeight: "140%",
-                fontFamily: bricolage,
-                textAlign: "center",
-              }}
-            >
-              Generating your question paper…
-            </p>
-            <p
-              style={{
-                margin: 0,
-                fontSize: 14,
-                fontWeight: 400,
-                color: "rgba(255,255,255,0.5)",
-                letterSpacing: "-0.02em",
-                lineHeight: "150%",
-                fontFamily: inter,
-                textAlign: "center",
-              }}
-            >
-              This may take a few moments. Please don&apos;t close the tab.
-            </p>
+          <div
+            style={{
+              background: "#FFFFFF",
+              borderRadius: 32,
+              flex: 1,
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 24,
+              padding: 40,
+              boxSizing: "border-box",
+            }}
+          >
+            <Lottie
+              animationData={generatingAnimation}
+              loop
+              autoplay
+              style={{ width: 200, height: 200 }}
+            />
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: 22,
+                  fontWeight: 700,
+                  color: primary,
+                  letterSpacing: "-0.04em",
+                  lineHeight: "140%",
+                  fontFamily: bricolage,
+                  textAlign: "center",
+                }}
+              >
+                Generating your question paper…
+              </p>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: 14,
+                  fontWeight: 400,
+                  color: "#8C8C8C",
+                  letterSpacing: "-0.02em",
+                  lineHeight: "150%",
+                  fontFamily: inter,
+                  textAlign: "center",
+                }}
+              >
+                This may take a few moments. Please don&apos;t close the tab.
+              </p>
+            </div>
           </div>
         </div>
       ) : (
         /* ── Outer dark container: Frame 1618872395 ── */
         <div
-        className="output-outer"
-        style={{
-          background: "#5E5E5E",
-          borderRadius: 32,
-          padding: 20,
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          gap: 12,
-          boxSizing: "border-box",
-        }}
-      >
-        {/* ── Dark header bar: Frame 1618872450 ── */}
-        {/* Figma: column layout, rgba(24,24,24,0.8), 32px radius, 24px/32px padding, gap 24px */}
-        <div
-          className="output-header"
+          className="output-outer"
           style={{
-            background: "rgba(24, 24, 24, 0.8)",
+            background: "#5E5E5E",
             borderRadius: 32,
-            padding: "24px 32px",
+            paddingTop: 20,
+            paddingRight: 20,
+            paddingBottom: 32,
+            paddingLeft: 20,
+            width: "100%",
             display: "flex",
             flexDirection: "column",
-            alignItems: "flex-start",
-            justifyContent: "center",
-            gap: 24,
+            gap: 12,
             boxSizing: "border-box",
-            width: "100%",
-            minHeight: 164,
           }}
         >
-          {/* Frame 1618872453 > Frame 1984077288 — title text */}
-          <p
-            className="output-header__intro"
-            style={{
-              margin: 0,
-              width: "100%",
-              fontSize: 20,
-              fontWeight: 700,
-              lineHeight: "140%",
-              letterSpacing: "-0.04em",
-              color: "#FFFFFF",
-              fontFamily: bricolage,
-            }}
-          >
-            {introText}
-          </p>
-
-          {/* Frame 1618872463 > Frame 1618872346 — Download button */}
+          {/* ── Dark header bar: Frame 1618872450 ── */}
+          {/* Figma: column layout, rgba(24,24,24,0.8), 32px radius, 24px/32px padding, gap 24px */}
           <div
-            className="output-download-desktop"
+            className="output-header"
             style={{
+              background: "rgba(24, 24, 24, 0.8)",
+              borderRadius: 32,
+              padding: "24px 32px",
               display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
+              flexDirection: "column",
               alignItems: "flex-start",
-              gap: 16,
+              justifyContent: "center",
+              gap: 24,
+              boxSizing: "border-box",
+              width: "100%",
+              minHeight: 164,
             }}
           >
-            <button
-              id="download-pdf-btn"
-              onClick={handleDownload}
+            {/* Frame 1618872453 > Frame 1984077288 — title text */}
+            <p
+              className="output-header__intro"
+              style={{
+                margin: 0,
+                width: "100%",
+                fontSize: 20,
+                fontWeight: 700,
+                lineHeight: "140%",
+                letterSpacing: "-0.04em",
+                color: "#FFFFFF",
+                fontFamily: bricolage,
+              }}
+            >
+              {introText}
+            </p>
+
+            {/* Frame 1618872463 > Frame 1618872346 — Download button */}
+            <div
+              className="output-download-desktop"
               style={{
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "center",
-                alignItems: "center",
-                padding: "0 24px",
-                gap: 4,
-                width: 200,
-                height: 44,
-                background: "#FFFFFF",
-                color: primary,
-                border: "none",
-                borderRadius: 100,
-                cursor: "pointer",
-                fontFamily: bricolage,
-                transition: "opacity 0.15s",
-                flexShrink: 0,
-                boxSizing: "border-box",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.opacity = "0.9";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.opacity = "1";
+                alignItems: "flex-start",
+                gap: 16,
               }}
             >
-              {/* Frame 1984077260 */}
-              <span
+              <button
+                id="download-pdf-btn"
+                onClick={handleDownload}
                 style={{
                   display: "flex",
                   flexDirection: "row",
+                  justifyContent: "center",
                   alignItems: "center",
+                  padding: "0 24px",
                   gap: 4,
+                  width: 200,
+                  height: 44,
+                  background: "#FFFFFF",
+                  color: primary,
+                  border: "none",
+                  borderRadius: 100,
+                  cursor: "pointer",
+                  fontFamily: bricolage,
+                  transition: "opacity 0.15s",
+                  flexShrink: 0,
+                  boxSizing: "border-box",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.opacity = "0.9";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLButtonElement).style.opacity = "1";
                 }}
               >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fillRule="evenodd" clipRule="evenodd" d="M8.92243 3.57745C9.24786 3.90289 9.24786 4.43053 8.92243 4.75596L4.51168 9.16671H17.4998C17.9601 9.16671 18.3332 9.5398 18.3332 10C18.3332 10.4603 17.9601 10.8334 17.4998 10.8334H4.51168L8.92243 15.2441C9.24786 15.5696 9.24786 16.0972 8.92243 16.4226C8.59699 16.7481 8.06935 16.7481 7.74391 16.4226L1.91058 10.5893C1.58514 10.2639 1.58514 9.73622 1.91058 9.41079L7.74391 3.57745C8.06935 3.25201 8.59699 3.25201 8.92243 3.57745Z" fill="#303030"/>
-                </svg>
+                {/* Frame 1984077260 */}
                 <span
                   style={{
-                    fontSize: 16,
-                    fontWeight: 500,
-                    lineHeight: "22px",
-                    letterSpacing: "-0.04em",
-                    color: primary,
-                    fontFamily: bricolage,
-                    whiteSpace: "nowrap",
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 4,
                   }}
                 >
-                  Download as PDF
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd" clipRule="evenodd" d="M13.224 5.05526C13.0206 5.00643 12.7929 5 12.0116 5H9.7998C8.94322 5 8.36092 5.00078 7.91083 5.03755C7.47242 5.07337 7.24821 5.1383 7.09181 5.21799C6.71549 5.40974 6.40953 5.7157 6.21778 6.09202C6.13809 6.24842 6.07317 6.47262 6.03735 6.91104C6.00057 7.36113 5.9998 7.94342 5.9998 8.8V12H3.9998L3.99979 8.7587C3.99978 7.95373 3.99977 7.28937 4.04399 6.74818C4.08991 6.18608 4.18848 5.66938 4.43577 5.18404C4.81926 4.43139 5.43118 3.81947 6.18383 3.43598C6.66917 3.18869 7.18587 3.09012 7.74797 3.0442C8.28916 2.99998 8.95353 2.99999 9.7585 3L12.0116 3C12.046 3 12.0799 2.99999 12.1135 2.99997C12.7484 2.99967 13.2282 2.99944 13.6909 3.11052C14.0991 3.20851 14.4893 3.37013 14.8471 3.58944C15.2529 3.83807 15.592 4.17749 16.0408 4.62672C16.0645 4.65043 16.0885 4.67445 16.1128 4.69878L18.301 6.88701C18.3253 6.91134 18.3494 6.93534 18.3731 6.95903C18.8223 7.40782 19.1617 7.74693 19.4104 8.15265C19.6297 8.51054 19.7913 8.90072 19.8893 9.30886C20.0004 9.77155 20.0001 10.2513 19.9998 10.8863C19.9998 10.9199 19.9998 10.9538 19.9998 10.9882V15.2413C19.9998 16.0463 19.9998 16.7106 19.9556 17.2518C19.9097 17.8139 19.8111 18.3306 19.5638 18.816C19.1803 19.5686 18.5684 20.1805 17.8158 20.564C17.3304 20.8113 16.8137 20.9099 16.2516 20.9558C15.7104 21 15.0461 21 14.2411 21H12.9998V19H14.1998C15.0564 19 15.6387 18.9992 16.0888 18.9625C16.5272 18.9266 16.7514 18.8617 16.9078 18.782C17.2841 18.5903 17.5901 18.2843 17.7818 17.908C17.8615 17.7516 17.9264 17.5274 17.9622 17.089C17.999 16.6389 17.9998 16.0566 17.9998 15.2V10.9882C17.9998 10.2069 17.9934 9.97916 17.9445 9.77575C17.8955 9.57168 17.8147 9.37659 17.7051 9.19765C17.5958 9.01929 17.4393 8.85373 16.8868 8.30122L14.6986 6.113C14.1461 5.56048 13.9805 5.40402 13.8022 5.29472C13.6232 5.18506 13.4281 5.10426 13.224 5.05526Z" fill="#303030" />
+                    <path fillRule="evenodd" clipRule="evenodd" d="M5.52545 16.5257L6.43059 13.8103H7.56901L8.47414 16.5257L11.1895 17.4308V18.5692L8.47414 19.4743L7.56901 22.1897H6.43059L5.52545 19.4743L2.81006 18.5692V17.4308L5.52545 16.5257Z" fill="#303030" />
+                    <path fillRule="evenodd" clipRule="evenodd" d="M13.9998 5V9H17.9998V11H12.9998C12.4475 11 11.9998 10.5523 11.9998 10V5H13.9998Z" fill="#303030" />
+                  </svg>
+                  <span
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 500,
+                      lineHeight: "22px",
+                      letterSpacing: "-0.04em",
+                      color: primary,
+                      fontFamily: bricolage,
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    Download as PDF
+                  </span>
                 </span>
-              </span>
+              </button>
+            </div>
+
+            {/* Mobile icon-only download button */}
+            <button
+              className="output-download-mobile"
+              id="download-pdf-btn-mobile"
+              onClick={handleDownload}
+              style={{
+                display: "none",
+                width: 36,
+                height: 36,
+                background: "rgba(246, 246, 246, 0.1)",
+                borderRadius: 100,
+                border: "none",
+                cursor: "pointer",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fillRule="evenodd" clipRule="evenodd" d="M13.224 5.05526C13.0206 5.00643 12.7929 5 12.0116 5H9.7998C8.94322 5 8.36092 5.00078 7.91083 5.03755C7.47242 5.07337 7.24821 5.1383 7.09181 5.21799C6.71549 5.40974 6.40953 5.7157 6.21778 6.09202C6.13809 6.24842 6.07317 6.47262 6.03735 6.91104C6.00057 7.36113 5.9998 7.94342 5.9998 8.8V12H3.9998L3.99979 8.7587C3.99978 7.95373 3.99977 7.28937 4.04399 6.74818C4.08991 6.18608 4.18848 5.66938 4.43577 5.18404C4.81926 4.43139 5.43118 3.81947 6.18383 3.43598C6.66917 3.18869 7.18587 3.09012 7.74797 3.0442C8.28916 2.99998 8.95353 2.99999 9.7585 3L12.0116 3C12.046 3 12.0799 2.99999 12.1135 2.99997C12.7484 2.99967 13.2282 2.99944 13.6909 3.11052C14.0991 3.20851 14.4893 3.37013 14.8471 3.58944C15.2529 3.83807 15.592 4.17749 16.0408 4.62672C16.0645 4.65043 16.0885 4.67445 16.1128 4.69878L18.301 6.88701C18.3253 6.91134 18.3494 6.93534 18.3731 6.95903C18.8223 7.40782 19.1617 7.74693 19.4104 8.15265C19.6297 8.51054 19.7913 8.90072 19.8893 9.30886C20.0004 9.77155 20.0001 10.2513 19.9998 10.8863C19.9998 10.9199 19.9998 10.9538 19.9998 10.9882V15.2413C19.9998 16.0463 19.9998 16.7106 19.9556 17.2518C19.9097 17.8139 19.8111 18.3306 19.5638 18.816C19.1803 19.5686 18.5684 20.1805 17.8158 20.564C17.3304 20.8113 16.8137 20.9099 16.2516 20.9558C15.7104 21 15.0461 21 14.2411 21H12.9998V19H14.1998C15.0564 19 15.6387 18.9992 16.0888 18.9625C16.5272 18.9266 16.7514 18.8617 16.9078 18.782C17.2841 18.5903 17.5901 18.2843 17.7818 17.908C17.8615 17.7516 17.9264 17.5274 17.9622 17.089C17.999 16.6389 17.9998 16.0566 17.9998 15.2V10.9882C17.9998 10.2069 17.9934 9.97916 17.9445 9.77575C17.8955 9.57168 17.8147 9.37659 17.7051 9.19765C17.5958 9.01929 17.4393 8.85373 16.8868 8.30122L14.6986 6.113C14.1461 5.56048 13.9805 5.40402 13.8022 5.29472C13.6232 5.18506 13.4281 5.10426 13.224 5.05526Z" fill="white" />
+                <path fillRule="evenodd" clipRule="evenodd" d="M5.52545 16.5257L6.43059 13.8103H7.56901L8.47414 16.5257L11.1895 17.4308V18.5692L8.47414 19.4743L7.56901 22.1897H6.43059L5.52545 19.4743L2.81006 18.5692V17.4308L5.52545 16.5257Z" fill="white" />
+                <path fillRule="evenodd" clipRule="evenodd" d="M13.9998 5V9H17.9998V11H12.9998C12.4475 11 11.9998 10.5523 11.9998 10V5H13.9998Z" fill="white" />
+              </svg>
             </button>
           </div>
 
-          {/* Mobile icon-only download button */}
-          <button
-            className="output-download-mobile"
-            id="download-pdf-btn-mobile"
-            onClick={handleDownload}
+          {/* ── White paper card: Frame 1618872449 ── */}
+          <div
             style={{
-              display: "none",
-              width: 36,
-              height: 36,
-              background: "rgba(246, 246, 246, 0.1)",
-              borderRadius: 100,
-              border: "none",
-              cursor: "pointer",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
+              borderRadius: 32,
+              overflow: "hidden",
             }}
           >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fillRule="evenodd" clipRule="evenodd" d="M10 2.5C10.4602 2.5 10.8333 2.8731 10.8333 3.33333V11.1548L13.2441 8.74408C13.5696 8.41864 14.0972 8.41864 14.4226 8.74408C14.7481 9.06951 14.7481 9.59715 14.4226 9.92259L10.5893 13.7559C10.2639 14.0814 9.73622 14.0814 9.41079 13.7559L5.57745 9.92259C5.25201 9.59715 5.25201 9.06951 5.57745 8.74408C5.90289 8.41864 6.43053 8.41864 6.75596 8.74408L9.16667 11.1548V3.33333C9.16667 2.8731 9.53976 2.5 10 2.5ZM3.33333 14.1667C3.79357 14.1667 4.16667 14.5398 4.16667 15V16.6667H15.8333V15C15.8333 14.5398 16.2064 14.1667 16.6667 14.1667C17.1269 14.1667 17.5 14.5398 17.5 15V16.6667C17.5 17.5871 16.7538 18.3333 15.8333 18.3333H4.16667C3.24619 18.3333 2.5 17.5871 2.5 16.6667V15C2.5 14.5398 2.8731 14.1667 3.33333 14.1667Z" fill="white"/>
-            </svg>
-          </button>
+            {generatedOutput ? (
+              <PaperContent paper={generatedOutput} />
+            ) : (
+              <div
+                style={{
+                  padding: "48px 32px",
+                  textAlign: "center",
+                  color: "#8C8C8C",
+                  fontFamily: inter,
+                  fontSize: 16,
+                  background: "#FFFFFF",
+                  borderRadius: 32,
+                }}
+              >
+                No assignment generated yet.
+              </div>
+            )}
+          </div>
         </div>
-
-        {/* ── White paper card: Frame 1618872449 ── */}
-        <div
-          style={{
-            borderRadius: 32,
-            overflow: "hidden",
-          }}
-        >
-          {generatedOutput ? (
-            <PaperContent paper={generatedOutput} />
-          ) : (
-            <div
-              style={{
-                padding: "48px 32px",
-                textAlign: "center",
-                color: "#8C8C8C",
-                fontFamily: inter,
-                fontSize: 16,
-                background: "#FFFFFF",
-                borderRadius: 32,
-              }}
-            >
-              No assignment generated yet.
-            </div>
-          )}
-        </div>
-      </div>
       )}
     </div>
   );

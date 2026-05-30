@@ -33,9 +33,9 @@ export default function AnswerKeySection({ paper }: { paper: GeneratedPaper }) {
           margin: "0 0 24px 0",
           width: "100%",
           fontSize: 16,
-          fontWeight: 700,
+          fontWeight: 600,
           lineHeight: "240%",
-          textAlign: "center",
+          textAlign: "left",
           letterSpacing: "-0.04em",
           color: primaryColor,
           fontFamily: inter,
@@ -47,16 +47,6 @@ export default function AnswerKeySection({ paper }: { paper: GeneratedPaper }) {
       {/* Only render answer key if we have real answers */}
       {validAnswers.length > 0 && (
         <>
-          {/* Thin divider */}
-          <div
-            style={{
-              width: "100%",
-              height: 1,
-              background: "#D0D0D0",
-              marginBottom: 20,
-            }}
-          />
-
           {/* "Answer Key:" — bold 18px */}
           <p
             className="ak-label"

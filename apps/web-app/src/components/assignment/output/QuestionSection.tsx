@@ -89,7 +89,7 @@ export default function QuestionSection({ section }: { section: Section }) {
           style={{
             margin: 0,
             fontSize: 18,
-            fontWeight: 600,
+            fontWeight: 200,
             fontStyle: "italic",
             lineHeight: "160%",
             letterSpacing: "-0.04em",
