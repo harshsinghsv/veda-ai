@@ -93,13 +93,14 @@ export default function AssignmentEmptyState() {
           align-items: center;
           gap: 8px;
           height: 46px;
-          padding: 0 26px;
+          padding: 0 20px;
           background: linear-gradient(#1c1c1c, #1c1c1c) padding-box,
             linear-gradient(180deg, #ff7243 0%, #c93d08 100%) border-box;
           color: #ffffff;
           border-radius: 999px;
           font-size: 14.5px;
           font-weight: 600;
+          white-space: nowrap;
           cursor: pointer;
           margin-top: 6px;
           font-family: inherit;

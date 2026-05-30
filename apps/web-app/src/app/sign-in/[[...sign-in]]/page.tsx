@@ -8,29 +8,12 @@ export default function SignInPage() {
       {/* ── LEFT: Branding ── */}
       <div className="auth-left">
         <div className="auth-left__inner">
-
-          {/* Floating logo */}
           <div className="auth-logo-wrap">
-            <div className="auth-logo-glow" />
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo 2.svg" alt="VedaAI" className="auth-logo-icon" />
+            <img src="/logo 2.svg" alt="VedaAI" width={340} height={340} className="auth-logo-icon" />
           </div>
 
-          {/* Wordmark */}
           <h1 className="auth-wordmark">VedaAI</h1>
-
-          {/* Tagline */}
-          <p className="auth-tagline">
-            The smartest way to create<br />
-            <span className="auth-tagline__accent">question papers.</span>
-          </p>
-
-          {/* Feature chips */}
-          <div className="auth-chips">
-            {["✦ Smart Generation", "✦ Auto Answer Keys", "✦ Mobile Ready"].map((c) => (
-              <span key={c} className="auth-chip">{c}</span>
-            ))}
-          </div>
         </div>
       </div>
 
@@ -157,8 +140,7 @@ export default function SignInPage() {
         }
         .auth-logo-wrap {
           position: relative;
-          width: 220px;
-          height: 220px;
+          width: 300px; height: 300px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -174,8 +156,7 @@ export default function SignInPage() {
         .auth-logo-icon {
           position: relative;
           z-index: 1;
-          width: 200px;
-          height: 200px;
+          width: 280px; height: 280px;
           filter: drop-shadow(0 8px 24px rgba(232,73,15,0.35));
           animation: float 5s ease-in-out infinite;
           object-fit: contain;
