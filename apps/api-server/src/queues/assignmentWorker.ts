@@ -6,7 +6,7 @@ import { AssignmentJobData } from '../types';
 import { broadcastAssignmentUpdate } from '../websocket/wsServer';
 
 const openai = new OpenAI({
-  apiKey: process.env.CEREBRAS_API_KEY!,
+  apiKey: process.env.CEREBRAS_API_KEY || 'missing_key',
   baseURL: 'https://api.cerebras.ai/v1',
 });
 
@@ -157,6 +157,10 @@ export const assignmentWorker = new Worker<AssignmentJobData>(
     broadcastAssignmentUpdate(assignmentId, { status: 'processing' });
 
     try {
+      if (!process.env.CEREBRAS_API_KEY) {
+        throw new Error('CEREBRAS_API_KEY is not configured in the environment variables.');
+      }
+
       const prompt = buildPrompt(job.data);
       const result = await openai.chat.completions.create({
         model: 'zai-glm-4.7',
