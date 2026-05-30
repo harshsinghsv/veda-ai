@@ -13,7 +13,7 @@ interface FieldError {
   questionTypes?: string;
 }
 
-function CreateFormFooter() {
+function CreateFormFooter({ validateForm }: { validateForm: () => boolean }) {
   const router = useRouter();
   const { formStep, isGenerating, resetForm, submitForm, setFormStep } =
     useAssignmentStore();
@@ -29,14 +29,10 @@ function CreateFormFooter() {
 
   const handleNext = async () => {
     if (formStep === 1) {
-      const isValid = await new Promise<boolean>((resolve) => {
-        window.dispatchEvent(
-          new CustomEvent("veda:validate-form", { detail: { resolve } })
-        );
-        setTimeout(() => resolve(false), 200);
-      });
+      const isValid = validateForm();
       if (!isValid) return;
-      setFormStep(2);
+      submitForm();
+      router.push("/assignments/output");
     } else {
       submitForm();
       router.push("/assignments/output");
@@ -222,13 +218,13 @@ export default function CreateAssignmentForm() {
       >
         <span
           style={{
-            width: 10,
-            height: 10,
+            width: 12,
+            height: 12,
             borderRadius: "50%",
-            background: "#22C55E",
+            background: "#4BC26D",
             display: "inline-block",
             flexShrink: 0,
-            boxShadow: "0 0 0 3px rgba(34,197,94,0.18)",
+            boxShadow: "0 0 0 4px rgba(75, 194, 109, 0.4)",
           }}
         />
         <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -269,7 +265,7 @@ export default function CreateAssignmentForm() {
           totalQuestions={totalQuestions}
           totalMarks={totalMarks}
         />
-        <CreateFormFooter />
+        <CreateFormFooter validateForm={validate} />
       </div>
     </div>
   );

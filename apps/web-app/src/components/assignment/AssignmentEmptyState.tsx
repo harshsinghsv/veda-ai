@@ -40,7 +40,7 @@ export default function AssignmentEmptyState() {
             (e.currentTarget as HTMLButtonElement).style.opacity = "1";
           }}
         >
-          <Plus size={15} />
+          <Plus size={20} />
           Create Your First Assignment
         </button>
       </div>
@@ -104,7 +104,6 @@ export default function AssignmentEmptyState() {
           margin-top: 6px;
           font-family: inherit;
           transition: opacity 0.18s;
-          border: 2px solid transparent;
         }
       `}</style>
     </div>
