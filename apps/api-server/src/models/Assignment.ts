@@ -9,6 +9,8 @@ export interface IQuestion {
   difficulty: 'Easy' | 'Medium' | 'Hard';
   type: 'MCQ' | 'Short Answer' | 'Long Answer';
   options?: string[]; // for MCQ
+  correctAnswer?: string; // for MCQ
+  answer?: string; // full answer key text
 }
 
 export interface IAssignment extends Document {
@@ -35,13 +37,15 @@ const QuestionSchema = new Schema<IQuestion>({
   difficulty: { type: String, enum: ['Easy', 'Medium', 'Hard'], required: true },
   type: { type: String, enum: ['MCQ', 'Short Answer', 'Long Answer'], required: true },
   options: [{ type: String }],
+  correctAnswer: { type: String },
+  answer: { type: String },
 });
 
 const AssignmentSchema = new Schema<IAssignment>(
   {
     title: { type: String, required: true, trim: true },
     subject: { type: String, required: true, trim: true },
-    grade: { type: String, required: true, trim: true },
+    grade: { type: String, required: false, default: '', trim: true },
     totalMarks: { type: Number, required: true, min: 1 },
     duration: { type: Number, required: true, min: 1 },
     topics: [{ type: String, required: true }],

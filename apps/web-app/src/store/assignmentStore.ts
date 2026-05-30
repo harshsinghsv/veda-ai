@@ -202,8 +202,8 @@ export const useAssignmentStore = create<AssignmentStore>()(
 
                 const paper: GeneratedPaper = {
                   school: formData.school,
-                  subject: assignment.subject || formData.subject,
-                  class: assignment.grade || formData.class,
+                  subject: assignment.subject ?? "",
+                  class: assignment.grade ?? "",
                   timeAllowed: `${assignment.duration ?? duration} minutes`,
                   maxMarks: assignment.totalMarks ?? totalMarks,
                   sections: sections.filter((s) => s.questions.length > 0),

@@ -69,11 +69,13 @@ function buildPrompt(data: AssignmentJobData): string {
     return sum + count;
   }, 0);
 
-  return `You are an expert ${data.subject} teacher for Grade ${data.grade}. Generate a complete, high-quality question paper as valid JSON only.
+  const gradeLabel = data.grade ? `Grade ${data.grade}` : 'general level';
+
+  return `You are an expert ${data.subject} teacher${data.grade ? ` for Grade ${data.grade}` : ''}. Generate a complete, high-quality question paper as valid JSON only.
 
 Paper Details:
 - Subject: ${data.subject}
-- Grade/Class: ${data.grade}
+${data.grade ? `- Grade/Class: ${data.grade}` : ''}
 - Total Marks: ${data.totalMarks}
 - Duration: ${data.duration} minutes
 - Total Questions: ${totalQuestions}
@@ -83,7 +85,7 @@ Sections required (generate EXACTLY this many questions per section):
 ${sectionLines}
 
 Rules:
-1. Questions must be relevant to ${data.subject} for Grade ${data.grade} students
+1. Questions must be relevant to ${data.subject}${data.grade ? ` for ${gradeLabel} students` : ''}
 2. Each question must be clear, unambiguous and educationally sound
 3. For MCQ, provide exactly 4 options (a, b, c, d) — one must be correct
 4. For Fill in the Blanks, use "______" as the blank
