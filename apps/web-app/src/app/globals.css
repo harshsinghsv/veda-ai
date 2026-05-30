@@ -86,15 +86,62 @@ input:-webkit-autofill:active {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
+   TABLET / MID-SIZED SCREENS — min-width: 421px and max-width: 1200px
+   Provides a Tailwind-like 'md'/'lg' breakpoint for smooth scaling.
+───────────────────────────────────────────────────────────────────────────── */
+@media (min-width: 769px) and (max-width: 1200px) {
+  .app-shell__inner {
+    padding: 12px !important;
+    gap: 12px !important;
+  }
+  
+  .app-shell__sidebar {
+    width: 304px !important;
+    min-width: 304px !important;
+  }
+
+  
+  .assignment-list__search {
+    width: auto !important;
+    flex: 1 !important;
+    max-width: 300px !important;
+  }
+
+  .assignment-list__filter {
+    gap: 16px !important;
+    padding: 0 16px !important;
+  }
+
+  .assignment-list__content,
+  .create-assignment__body {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 980px) {
+  .assignment-list__grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
    MOBILE RESPONSIVE STYLES — max-width: 420px
    All styles use !important to override inline styles on React components.
    This lives in globals.css to avoid styled-jsx scoping limitations.
+   Note: If you are seeing this, please hard refresh your browser!
 ───────────────────────────────────────────────────────────────────────────── */
-@media (max-width: 420px) {
+@media (max-width: 768px) {
 
   /* Fix body scroll on mobile */
   body {
     overflow: auto !important;
+  }
+
+  /* ── Output Page ──────────────────────────────────────────────────────── */
+  .output-page-container {
+    padding: 12px 12px 140px !important;
+    box-sizing: border-box !important;
   }
 
   /* ── Header ───────────────────────────────────────────────────────────── */
@@ -203,7 +250,8 @@ input:-webkit-autofill:active {
   }
 
   .empty-state__copy {
-    width: 373px !important;
+    width: 100% !important;
+    max-width: 373px !important;
     gap: 12px !important;
   }
 
@@ -245,17 +293,19 @@ input:-webkit-autofill:active {
   }
 
   .assignment-list__content {
-    padding: 0 10px 140px !important;
-    width: 373px !important;
+    padding: 0 16px 140px !important;
+    width: 100% !important;
+    max-width: 500px !important;
     min-height: 816px !important;
     margin: 0 auto !important;
+    box-sizing: border-box !important;
   }
 
   .assignment-list__mobile-bar {
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-    width: 373px !important;
+    width: 100% !important;
     height: 48px !important;
     gap: 24px !important;
     margin-bottom: 20px !important;
@@ -301,7 +351,8 @@ input:-webkit-autofill:active {
   }
 
   .assignment-list__search {
-    width: 228px !important;
+    width: 100% !important;
+    max-width: 300px !important;
   }
 
   .assignment-list__search-input {
@@ -358,7 +409,8 @@ input:-webkit-autofill:active {
     left: 50% !important;
     bottom: 17px !important;
     transform: translateX(-50%) !important;
-    width: 373px !important;
+    width: 100% !important;
+    max-width: 373px !important;
     height: 72px !important;
     display: flex !important;
     align-items: center !important;
@@ -390,7 +442,9 @@ input:-webkit-autofill:active {
   }
 
   .create-assignment__body {
-    max-width: 373px !important;
+    width: 100% !important;
+    max-width: 500px !important;
+    margin: 0 auto !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
@@ -468,14 +522,14 @@ input:-webkit-autofill:active {
 
   /* Previous button */
   #form-prev-btn {
-    width: 134px !important;
+    width: auto !important;
     height: 46px !important;
     font-size: 16px !important;
   }
 
   /* Continue/Next button */
   #form-next-btn {
-    width: 106px !important;
+    width: auto !important;
     height: 46px !important;
     font-size: 16px !important;
   }
