@@ -157,7 +157,8 @@ export default function Header({ title, showBack = true, disableBack = false, sh
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              width: 157,
+              width: "auto",
+              maxWidth: 157,
               height: 44,
               gap: 8,
               cursor: "pointer",
@@ -211,7 +212,8 @@ export default function Header({ title, showBack = true, disableBack = false, sh
                 alignItems: "center",
                 padding: 0,
                 gap: 4,
-                width: 93,
+                flex: 1,
+                minWidth: 0,
                 height: 24,
               }}
             >
@@ -219,14 +221,17 @@ export default function Header({ title, showBack = true, disableBack = false, sh
               <span
                 className="app-header__user-name"
                 style={{
-                  width: 65,
+                  flex: 1,
+                  minWidth: 0,
                   height: 19,
                   fontFamily: "var(--font-bricolage), sans-serif",
                   fontWeight: 600,
                   fontSize: 16,
                   lineHeight: "19px",
-                  display: "flex",
-                  alignItems: "center",
+                  display: "block",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
                   letterSpacing: "-0.04em",
                   color: "#303030",
                 }}

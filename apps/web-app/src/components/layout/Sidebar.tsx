@@ -133,15 +133,16 @@ export default function Sidebar() {
       }}
     >
       {/* ── Top Block (Frame 39962) ── */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 56, width: 254, margin: "0 auto", alignItems: "center" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 56, width: "100%", margin: "0 auto", alignItems: "stretch", boxSizing: "border-box" }}>
         {/* ── Logo ── */}
         <div
           style={{
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
+            justifyContent: "flex-start",
             gap: 8,
-            width: 251,
+            width: "100%",
             height: 40,
           }}
         >
@@ -185,9 +186,10 @@ export default function Sidebar() {
             flexDirection: "row",
             justifyContent: "center",
             alignItems: "center",
-            padding: "8px 43px",
+            padding: "8px 16px",
+            marginBottom: 40,
             gap: 10,
-            width: 251,
+            width: "100%",
             height: 42,
             background: "linear-gradient(#272727, #272727) padding-box, linear-gradient(180deg, #FF7243 0%, #C93D08 100%) border-box",
             border: "4px solid transparent",
@@ -195,6 +197,7 @@ export default function Sidebar() {
             cursor: "pointer",
             transition: "opacity 0.18s",
             flexShrink: 0,
+            boxSizing: "border-box",
           }}
           onMouseEnter={(e) => {
             (e.currentTarget as HTMLButtonElement).style.opacity = "0.88";
@@ -227,6 +230,8 @@ export default function Sidebar() {
             display: "flex",
             flexDirection: "column",
             gap: 8,
+            width: "100%",
+            boxSizing: "border-box",
           }}
         >
           {NAV_ITEMS.map((item) => {
@@ -239,7 +244,7 @@ export default function Sidebar() {
                 id={`nav-${item.label.replace(/\s+/g, "-").toLowerCase()}`}
                 onClick={() => router.push(item.href)}
                 style={{
-                  width: 254,
+                  width: "100%",
                   height: 40,
                   borderRadius: 8,
                   padding: "9px 12px",
@@ -301,12 +306,12 @@ export default function Sidebar() {
       </div>
 
       {/* ── Bottom Block (Frame 1984077460) ── */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 8, width: 256, margin: "0 auto" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8, width: "100%", boxSizing: "border-box" }}>
         {/* ── Settings ── */}
         <button
           id="nav-settings"
           style={{
-            width: 256,
+            width: "100%",
             height: 38,
             borderRadius: 8,
             padding: "8px 12px",
@@ -336,7 +341,7 @@ export default function Sidebar() {
         {/* ── School card ── */}
         <div
           style={{
-            width: 256,
+            width: "100%",
             height: 80,
             background: "#F0F0F0",
             borderRadius: 16,
@@ -348,8 +353,8 @@ export default function Sidebar() {
             flexShrink: 0,
           }}
         >
-          {/* Profile Info Row (232x56) */}
-          <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, width: 232, height: 56 }}>
+          {/* Profile Info Row (fluid width) */}
+          <div style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, width: "100%", height: 56 }}>
             {/* Avatar */}
             <div
               style={{
@@ -367,7 +372,7 @@ export default function Sidebar() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/DPS.png" alt="Delhi Public School" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             </div>
-            <div style={{ display: "flex", flexDirection: "column", width: 165, height: 44, justifyContent: "center" }}>
+            <div style={{ display: "flex", flexDirection: "column", flex: 1, minWidth: 0, height: 44, justifyContent: "center" }}>
               <div
                 style={{
                   fontWeight: 700,
@@ -377,8 +382,8 @@ export default function Sidebar() {
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   height: 22,
-                  display: "flex",
-                  alignItems: "center",
+                  lineHeight: "22px",
+                  display: "block",
                 }}
               >
                 Delhi Public School
@@ -388,9 +393,12 @@ export default function Sidebar() {
                   fontSize: 14,
                   fontWeight: 400,
                   color: "#5E5E5E",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
                   height: 20,
-                  display: "flex",
-                  alignItems: "center",
+                  lineHeight: "20px",
+                  display: "block",
                 }}
               >
                 Bokaro Steel City

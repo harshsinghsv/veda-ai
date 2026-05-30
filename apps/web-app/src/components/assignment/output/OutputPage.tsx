@@ -244,7 +244,7 @@ export default function OutputPage() {
   // ── Empty state: not generating, no output ──────────────────────────────
   if (!isGenerating && !generatedOutput) {
     return (
-      <div style={{ padding: 0, height: "100%" }}>
+      <div className="output-page-container" style={{ height: "100%" }}>
         <div
           className="output-outer"
           style={{
@@ -308,7 +308,7 @@ export default function OutputPage() {
   }
 
   return (
-    <div style={{ padding: 0, height: "100%" }}>
+    <div className="output-page-container" style={{ height: "100%" }}>
       {isGenerating ? (
         /* ── Full-height generating state ── */
         <div

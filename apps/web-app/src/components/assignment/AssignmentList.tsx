@@ -153,7 +153,7 @@ export default function AssignmentList() {
             Filter By
           </button>
 
-          <div className="assignment-list__search" style={{ position: "relative", width: 380 }}>
+          <div className="assignment-list__search" style={{ position: "relative", width: "100%", maxWidth: 380 }}>
             <svg
               width="20"
               height="20"
@@ -342,7 +342,7 @@ export default function AssignmentList() {
 
       <style>{`
         .assignment-list__fab { display: none; }
-        @media (min-width: 421px) {
+        @media (min-width: 769px) {
           .assignment-list__mobile-bar { display: none; }
           .assignment-list__mobile-nav { display: none; }
         }

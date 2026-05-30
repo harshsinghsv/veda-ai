@@ -86,6 +86,7 @@ export default function AssignmentCard({ assignment }: AssignmentCardProps) {
                 letterSpacing: "-0.04em",
                 fontFamily: "inherit",
                 flex: 1,
+                minWidth: 0,
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
