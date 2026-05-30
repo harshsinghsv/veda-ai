@@ -4,6 +4,7 @@ import React from "react";
 import { useUser } from "@clerk/nextjs";
 import Sidebar from "@/components/layout/Sidebar";
 import Header from "@/components/layout/Header";
+import MobileBottomNav from "@/components/layout/MobileBottomNav";
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -107,6 +108,7 @@ export default function AppShell({
           {footerSlot}
         </div>
       </div>
+      <MobileBottomNav />
     </div>
   );
 }
