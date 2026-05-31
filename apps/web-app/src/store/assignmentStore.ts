@@ -37,6 +37,7 @@ interface AssignmentStore {
   deleteAssignment: (id: string) => void;
   setGeneratedOutput: (paper: GeneratedPaper | null) => void;
   setIsGenerating: (v: boolean) => void;
+  loadAssignment: (id: string) => Promise<void>;
   resetForm: () => void;
 }
 
@@ -254,6 +255,102 @@ export const useAssignmentStore = create<AssignmentStore>()(
 
       setGeneratedOutput: (paper) => set({ generatedOutput: paper }),
       setIsGenerating: (v) => set({ isGenerating: v }),
+
+      loadAssignment: async (id) => {
+        const apiBase =
+          process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ||
+          "http://localhost:5000";
+
+        set({ isGenerating: true, generatedOutput: null });
+
+        try {
+          const res = await fetch(`${apiBase}/api/assignments/${id}`);
+          if (!res.ok) throw new Error("Failed to fetch assignment");
+          const assignment = await res.json();
+
+          if (assignment.status === "completed") {
+            const sectionsMap: Record<string, any[]> = {};
+            (assignment.questions || []).forEach((q: any) => {
+              const sec = q.section || "A";
+              if (!sectionsMap[sec]) sectionsMap[sec] = [];
+              sectionsMap[sec].push(q);
+            });
+
+            const sectionLetters = Object.keys(sectionsMap).sort();
+            const sections = sectionLetters.map((secLetter) => {
+              const qList = sectionsMap[secLetter].sort((a, b) => a.questionNumber - b.questionNumber);
+              const firstQ = qList[0];
+              
+              let typeLabel = "Questions";
+              if (firstQ) {
+                if (firstQ.type === "MCQ") typeLabel = "Multiple Choice Questions";
+                else if (firstQ.type === "Short Answer") typeLabel = "Short Questions";
+                else if (firstQ.type === "Long Answer") typeLabel = "Long Answer Questions";
+                else typeLabel = firstQ.type;
+              }
+              
+              const marks = firstQ?.marks || 1;
+              
+              let instruction = `Attempt all questions. Each question carries ${marks} mark${marks > 1 ? "s" : ""}.`;
+              if (firstQ?.type === "MCQ") {
+                instruction = `Choose the correct option. Each question carries ${marks} mark${marks > 1 ? "s" : ""}.`;
+              } else if (firstQ?.type === "Short Answer") {
+                instruction = `Answer the following questions in 2–3 sentences. Each question carries ${marks} mark${marks > 1 ? "s" : ""}.`;
+              } else if (firstQ?.type === "Long Answer") {
+                instruction = `Answer the following questions in detail. Each question carries ${marks} mark${marks > 1 ? "s" : ""}.`;
+              }
+
+              const mappedQuestions = qList.map((q, idx) => ({
+                id: idx + 1,
+                text: q.text,
+                difficulty: (
+                  q.difficulty === "Easy"
+                    ? "Easy"
+                    : q.difficulty === "Medium" || q.difficulty === "Moderate"
+                      ? "Moderate"
+                      : "Challenging"
+                ) as "Easy" | "Moderate" | "Challenging",
+                marks: q.marks,
+                options: q.options,
+              }));
+
+              return {
+                title: `Section ${secLetter}`,
+                questionType: typeLabel,
+                instruction,
+                questions: mappedQuestions,
+              };
+            });
+
+            const answerKey = (assignment.questions || []).map((q: any, idx: number) => ({
+              id: idx + 1,
+              questionSection: q.section,
+              questionNumber: q.questionNumber,
+              text: q.answer ||
+                (q.correctAnswer ? `Correct answer: ${q.correctAnswer}` : "Answer not available."),
+            }));
+
+            const paper: GeneratedPaper = {
+              school: get().formData.school || "Delhi Public School, Sector-4, Bokaro",
+              subject: assignment.subject ?? "",
+              class: assignment.grade ?? "",
+              timeAllowed: `${assignment.duration ?? 45} minutes`,
+              maxMarks: assignment.totalMarks ?? 0,
+              sections: sections.filter((s) => s.questions.length > 0),
+              answerKey,
+            };
+
+            set({ isGenerating: false, generatedOutput: paper });
+          } else if (assignment.status === "failed") {
+            set({ isGenerating: false, generatedOutput: null });
+          } else {
+            set({ isGenerating: true, generatedOutput: null });
+          }
+        } catch (error) {
+          console.error("loadAssignment error:", error);
+          set({ isGenerating: false, generatedOutput: null });
+        }
+      },
 
       resetForm: () =>
         set({

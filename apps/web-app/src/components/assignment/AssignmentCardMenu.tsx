@@ -12,6 +12,7 @@ export default function AssignmentCardMenu({ assignmentId }: AssignmentCardMenuP
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const deleteAssignment = useAssignmentStore((s) => s.deleteAssignment);
+  const loadAssignment = useAssignmentStore((s) => s.loadAssignment);
   const router = useRouter();
 
   useEffect(() => {
@@ -81,6 +82,7 @@ export default function AssignmentCardMenu({ assignmentId }: AssignmentCardMenuP
             id={`view-${assignmentId}`}
             onClick={() => {
               setDropdownOpen(false);
+              loadAssignment(assignmentId);
               router.push("/assignments/output");
             }}
             style={{

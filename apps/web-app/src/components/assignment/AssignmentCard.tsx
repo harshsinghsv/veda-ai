@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
+import { useAssignmentStore } from "@/store/assignmentStore";
 import { Assignment } from "@/types/assignment";
 import AssignmentCardMenu from "@/components/assignment/AssignmentCardMenu";
 
@@ -9,10 +11,17 @@ interface AssignmentCardProps {
 }
 
 export default function AssignmentCard({ assignment }: AssignmentCardProps) {
+  const router = useRouter();
+  const loadAssignment = useAssignmentStore((s) => s.loadAssignment);
+
   return (
     /* Frame 40026 — 542×162px, padding 24px, border-radius 24px, background #FFFFFF */
     <div
       className="assignment-card"
+      onClick={() => {
+        loadAssignment(assignment.id);
+        router.push("/assignments/output");
+      }}
       style={{
         background: "#FFFFFF",
         borderRadius: 24,
