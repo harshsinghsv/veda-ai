@@ -89,6 +89,14 @@ input:-webkit-autofill:active {
   display: none;
 }
 
+.desktop-header-only {
+  display: block;
+}
+
+.mobile-header-only {
+  display: none !important;
+}
+
 /* ─────────────────────────────────────────────────────────────────────────────
    TABLET / MID-SIZED SCREENS — min-width: 421px and max-width: 1200px
    Provides a Tailwind-like 'md'/'lg' breakpoint for smooth scaling.
@@ -136,6 +144,14 @@ input:-webkit-autofill:active {
    Note: If you are seeing this, please hard refresh your browser!
 ───────────────────────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
+
+  .desktop-header-only {
+    display: none !important;
+  }
+
+  .mobile-header-only {
+    display: flex !important;
+  }
 
   /* Fix body scroll on mobile */
   body {
