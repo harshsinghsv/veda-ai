@@ -210,7 +210,23 @@ export const useAssignmentStore = create<AssignmentStore>()(
                   answerKey,
                 };
 
-                set({ isGenerating: false, generatedOutput: paper });
+                const realSubject = assignment.subject || formData.subject;
+                const realClass = assignment.grade || formData.class;
+
+                set((state) => ({
+                  assignments: state.assignments.map((a) =>
+                    a.id === assignmentId
+                      ? {
+                          ...a,
+                          subject: realSubject,
+                          class: realClass,
+                          title: `${realSubject} Assignment`,
+                        }
+                      : a
+                  ),
+                  isGenerating: false,
+                  generatedOutput: paper,
+                }));
                 return;
               }
 
