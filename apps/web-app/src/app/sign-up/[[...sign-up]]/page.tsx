@@ -5,7 +5,7 @@ export default function SignUpPage() {
   return (
     <div className="auth-root">
 
-      {/* ── LEFT: Branding ── */}
+      {/* ── LEFT: Mobile-Optimized Branding Header ── */}
       <div className="auth-left">
         <div className="auth-left__inner">
           <div className="auth-logo-wrap">
@@ -14,6 +14,13 @@ export default function SignUpPage() {
           </div>
 
           <h1 className="auth-wordmark">VedaAI</h1>
+
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img 
+            src="/Veda-ai-login-signup-mobile.png" 
+            alt="VedaAI" 
+            className="auth-mobile-brand-img"
+          />
         </div>
       </div>
 
@@ -33,13 +40,18 @@ export default function SignUpPage() {
               fontSize: "15px",
             },
             elements: {
-              rootBox: { width: "100%" },
+              rootBox: { 
+                width: "100%",
+                display: "flex",
+                justifyContent: "center"
+              },
               card: {
                 width: "100%",
+                maxWidth: "400px",
                 borderRadius: "20px",
                 boxShadow: "0 8px 40px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06)",
                 border: "none",
-                padding: "32px 28px",
+                padding: "32px 24px",
               },
               headerTitle: {
                 fontFamily: "var(--font-bricolage), sans-serif",
@@ -183,6 +195,9 @@ export default function SignUpPage() {
           backdrop-filter: blur(8px);
           width: fit-content;
         }
+        .auth-mobile-brand-img {
+          display: none;
+        }
         .auth-right {
           flex: 1;
           display: flex;
@@ -191,15 +206,43 @@ export default function SignUpPage() {
           padding: 48px 40px;
         }
         @media (max-width: 768px) {
-          .auth-root { flex-direction: column; }
-          .auth-left { padding: 48px 24px 24px; justify-content: center; }
-          .auth-left__inner { align-items: center; text-align: center; }
+          .auth-root { 
+            flex-direction: column; 
+            justify-content: center !important;
+          }
+          .auth-left {
+            flex: none !important;
+            padding: 24px 24px 0px !important;
+            justify-content: center;
+          }
+          .auth-left::before { display: none !important; }
+          .auth-left__inner {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            width: 100% !important;
+          }
+          .auth-logo-wrap, .auth-wordmark {
+            display: none !important;
+          }
+          .auth-mobile-brand-img {
+            display: block !important;
+            height: 80px !important;
+            width: auto !important;
+            object-fit: contain;
+          }
           .auth-chips { align-items: center; }
           .auth-right {
+            flex: none !important;
             width: 100%;
             border-left: none;
-            border-top: 1px solid rgba(255,255,255,0.6);
-            padding: 32px 24px 48px;
+            border-top: none;
+            padding: 8px 16px 32px !important;
+            box-sizing: border-box !important;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
           }
         }
       `}</style>
